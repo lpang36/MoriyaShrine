@@ -1,9 +1,15 @@
 from PIL import Image
 import os
 import pandas as pd
+import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten
 from keras.layers import Convolution2D,MaxPooling2D
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+import h5py
+
+dims = (300,400,3)
 
 def load_image(filename):
 	im = Image.open(filename)
@@ -11,24 +17,38 @@ def load_image(filename):
 	return pixels
 
 def load_all(foldername):
-	return [load_image(os.path.join(foldername,filename)) for filename in os.listdir(foldername)]
+	output = np.empty((0,dims[0],dims[1],dims[2]))
+	for filename in os.listdir(foldername):
+		image = np.reshape(load_image(os.path.join(foldername,filename)),(-1,dims[0],dims[1],dims[2]))
+		output = np.concatenate((output,image),0)
+	return output.astype(np.uint8)
+
+def display(image,box):
+	plt.figure()
+	plt.imshow(image)
+	ax = plt.gca()
+	ax.add_patch(Rectangle((box[0],box[1]),box[2],box[3],ec='r',fc='none'))
+	plt.show()
 
 all_images = load_all('/home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Images')
 
 data = pd.read_csv('/home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Data/data.csv')
-data['Data'] = data['Data'].apply(lambda x:eval(str(x))[1:])
-y = data['Data'].values
+data['Data'] = data['Data'].apply(lambda x:np.asarray(eval(str(x))[1:]))
+y = np.empty((0,4))
+for row in data['Data']:
+	y = np.concatenate((y,np.reshape(row,(1,-1))))
 
 # Model Architecture
 model = Sequential()
 
-model.add(Convolution2D(32, (8, 8), activation='relu', input_shape=(None,None,3)))
+model.add(Convolution2D(32, (5, 5), activation='relu', input_shape=dims))
 model.add(MaxPooling2D(pool_size=(2,2)))
 
-model.add(Convolution2D(32, (8, 8), activation='relu'))
+model.add(Convolution2D(64, (3, 3), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2,2)))
 
 model.add(Flatten())
+model.add(Dense(128))
 model.add(Dense(4))
 
 # Compile model
@@ -42,5 +62,7 @@ Y_val = y[n_train:]
 
 model.fit(x=X_train,y=Y_train,batch_size=16,epochs=10,validation_data=(X_val,Y_val))
 
-
-
+model.save('home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Data/model.h5')
+results = model.predict(X_val)
+for i in range(np.shape(results)[0]):
+	display(X_val[i],results[i])
