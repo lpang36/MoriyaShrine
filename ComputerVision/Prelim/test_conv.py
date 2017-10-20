@@ -62,7 +62,7 @@ Y_val = y[n_train:]
 
 model.fit(x=X_train,y=Y_train,batch_size=16,epochs=10,validation_data=(X_val,Y_val))
 
-model.save('home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Data/model.h5')
+model.save('/home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Data/model.h5')
 results = model.predict(X_val)
 for i in range(np.shape(results)[0]):
 	display(X_val[i],results[i])
