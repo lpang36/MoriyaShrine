@@ -4,3 +4,7 @@
 *.csv
 *.pyc
 *.h5
+*.out
+*.xml
+*.xsl
+/External

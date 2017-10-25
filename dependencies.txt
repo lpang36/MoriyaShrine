@@ -1,0 +1,3 @@
+dlib
+libx11-dev
+cmake
