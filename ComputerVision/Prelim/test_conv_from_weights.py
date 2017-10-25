@@ -36,9 +36,9 @@ def display(image,box1,box2):
 	ax.add_patch(Rectangle((box2[0],box2[1]),box2[2],box2[3],ec='b',fc='none'))
 	plt.show()
 
-all_images = load_all('/home/lpang/Documents/GitHub/imggen/images')
+all_images = load_all('/home/lpang/Documents/GitHub/imggen/images_person')
 
-data = pd.read_csv('/home/lpang/Documents/GitHub/imggen/data/data.csv')
+data = pd.read_csv('/home/lpang/Documents/GitHub/imggen/data/data_person.csv')
 data['Data'] = data['Data'].apply(lambda x:np.asarray(eval(str(x))[1:]))
 y = np.empty((0,4))
 for row in data['Data']:
@@ -50,7 +50,7 @@ X_val = all_images[n_train:]
 Y_train = y[:n_train]
 Y_val = y[n_train:]
 	
-model = load_model('/home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Data/model.h5')
+model = load_model('/home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Data/model_person.h5')
 	
 results = model.predict(X_train)
 for i in range(np.shape(results)[0]):

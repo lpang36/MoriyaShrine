@@ -31,13 +31,13 @@ def display(image,box):
 	ax.add_patch(Rectangle((box[0],box[1]),box[2],box[3],ec='r',fc='none'))
 	plt.show()
 
-data = pd.read_csv('/home/lpang/Documents/GitHub/imggen/data/data.csv')
+data = pd.read_csv('/home/lpang/Documents/GitHub/imggen/data/data_person.csv')
 data['Data'] = data['Data'].apply(lambda x:np.asarray(eval(str(x))[1:]))
 y = np.empty((0,4))
 for row in data['Data']:
 	y = np.concatenate((y,np.reshape(row,(1,-1))))
 
-all_images = load_all('/home/lpang/Documents/GitHub/imggen/images')
+all_images = load_all('/home/lpang/Documents/GitHub/imggen/images_person')
 
 # Model Architecture
 model = Sequential()
@@ -75,7 +75,7 @@ Y_val = y[n_train:]
 
 model.fit(x=X_train,y=Y_train,batch_size=16,epochs=10,validation_data=(X_val,Y_val))
 
-model.save('/home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Data/model.h5')
+model.save('/home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Data/model_person.h5')
 results = model.predict(X_val)
 for i in range(np.shape(results)[0]):
 	display(X_val[i],results[i])
