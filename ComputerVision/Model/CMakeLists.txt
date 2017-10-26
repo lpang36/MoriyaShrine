@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 2.8.12)
+project(model)
+include(../../External/dlib-19.7/dlib/cmake)
+add_executable(dnn_mmod_face_detection_ex dnn_mmod_face_detection_ex.cpp)
+target_link_libraries(dnn_mmod_face_detection_ex dlib)

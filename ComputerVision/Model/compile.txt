@@ -1,2 +1,0 @@
-g++ -ldlib dnn_mmod_face_detection_ex.cpp -std=c++11
-
