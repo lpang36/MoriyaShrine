@@ -9,3 +9,11 @@
 *.xsl
 /External
 *.dat
+*.cpp.o
+*.cmake
+*.check_cache
+*.make
+*.includecache  
+*.marks
+*.cxx
+/ComputerVision/Build

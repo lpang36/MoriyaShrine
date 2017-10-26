@@ -1,6 +1,0 @@
-/home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Build/CMakeFiles/edit_cache.dir
-/home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Build/CMakeFiles/rebuild_cache.dir
-/home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Build/CMakeFiles/dnn_mmod_face_detection_ex.dir
-/home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Build/dlib_build/CMakeFiles/edit_cache.dir
-/home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Build/dlib_build/CMakeFiles/rebuild_cache.dir
-/home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Build/dlib_build/CMakeFiles/dlib.dir
