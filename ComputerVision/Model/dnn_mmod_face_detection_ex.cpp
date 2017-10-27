@@ -88,7 +88,7 @@ int main(int argc, char** argv) try
 
         // Upsampling the image will allow us to detect smaller faces but will cause the
         // program to use more RAM and run longer.
-        while(img.size() < 800*800)
+        while(img.size() < 300*300)
             pyramid_up(img);
 
         // Note that you can process a bunch of images in a std::vector at once and it runs
