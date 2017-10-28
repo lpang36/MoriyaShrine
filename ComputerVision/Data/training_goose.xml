@@ -1,0 +1,306 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<?xml-stylesheet type='text/xsl' href='image_metadata_stylesheet.xsl'?>
+<dataset>
+<images>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/0.png'>
+		<box top='104' left='27' width='91' height='113'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/1.png'>
+		<box top='225' left='211' width='46' height='55'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/2.png'>
+		<box top='154' left='138' width='43' height='53'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/3.png'>
+		<box top='176' left='78' width='57' height='53'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/4.png'>
+		<box top='76' left='65' width='72' height='89'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/5.png'>
+		<box top='130' left='191' width='90' height='103'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/6.png'>
+		<box top='131' left='125' width='98' height='98'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/7.png'>
+		<box top='340' left='17' width='40' height='53'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/8.png'>
+		<box top='84' left='79' width='38' height='52'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/9.png'>
+		<box top='222' left='69' width='96' height='128'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/10.png'>
+		<box top='52' left='77' width='91' height='91'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/11.png'>
+		<box top='34' left='187' width='42' height='57'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/12.png'>
+		<box top='191' left='132' width='77' height='93'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/13.png'>
+		<box top='205' left='8' width='101' height='170'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/14.png'>
+		<box top='157' left='137' width='78' height='76'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/15.png'>
+		<box top='211' left='91' width='80' height='96'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/16.png'>
+		<box top='25' left='113' width='45' height='61'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/17.png'>
+		<box top='103' left='97' width='81' height='79'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/18.png'>
+		<box top='89' left='95' width='114' height='130'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/19.png'>
+		<box top='266' left='60' width='37' height='50'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/20.png'>
+		<box top='149' left='214' width='45' height='60'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/21.png'>
+		<box top='158' left='164' width='96' height='128'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/22.png'>
+		<box top='2' left='109' width='74' height='90'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/23.png'>
+		<box top='80' left='26' width='98' height='132'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/24.png'>
+		<box top='292' left='53' width='65' height='87'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/25.png'>
+		<box top='230' left='62' width='131' height='175'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/26.png'>
+		<box top='59' left='94' width='145' height='141'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/27.png'>
+		<box top='12' left='36' width='103' height='126'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/28.png'>
+		<box top='105' left='88' width='60' height='102'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/29.png'>
+		<box top='226' left='11' width='74' height='89'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/30.png'>
+		<box top='134' left='110' width='117' height='157'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/31.png'>
+		<box top='274' left='119' width='62' height='83'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/32.png'>
+		<box top='242' left='148' width='72' height='118'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/33.png'>
+		<box top='74' left='40' width='145' height='148'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/34.png'>
+		<box top='102' left='143' width='49' height='56'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/35.png'>
+		<box top='245' left='43' width='114' height='117'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/36.png'>
+		<box top='93' left='101' width='149' height='153'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/37.png'>
+		<box top='132' left='137' width='38' height='38'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/38.png'>
+		<box top='186' left='29' width='72' height='118'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/39.png'>
+		<box top='332' left='28' width='64' height='74'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/40.png'>
+		<box top='274' left='77' width='115' height='115'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/41.png'>
+		<box top='137' left='15' width='44' height='45'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/42.png'>
+		<box top='229' left='155' width='97' height='130'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/43.png'>
+		<box top='205' left='162' width='103' height='103'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/44.png'>
+		<box top='118' left='122' width='107' height='128'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/45.png'>
+		<box top='178' left='72' width='89' height='145'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/46.png'>
+		<box top='41' left='174' width='64' height='64'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/47.png'>
+		<box top='217' left='53' width='128' height='124'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/48.png'>
+		<box top='107' left='59' width='61' height='82'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/49.png'>
+		<box top='245' left='84' width='37' height='42'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/50.png'>
+		<box top='50' left='70' width='63' height='86'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/51.png'>
+		<box top='108' left='31' width='82' height='93'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/52.png'>
+		<box top='56' left='3' width='128' height='171'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/53.png'>
+		<box top='189' left='120' width='122' height='140'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/54.png'>
+		<box top='300' left='235' width='44' height='58'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/55.png'>
+		<box top='60' left='75' width='60' height='98'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/56.png'>
+		<box top='152' left='146' width='134' height='137'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/57.png'>
+		<box top='164' left='22' width='47' height='57'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/58.png'>
+		<box top='158' left='77' width='114' height='157'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/59.png'>
+		<box top='113' left='125' width='108' height='144'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/60.png'>
+		<box top='195' left='100' width='120' height='145'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/61.png'>
+		<box top='50' left='79' width='68' height='83'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/62.png'>
+		<box top='240' left='14' width='62' height='84'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/63.png'>
+		<box top='61' left='133' width='95' height='154'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/64.png'>
+		<box top='67' left='65' width='111' height='126'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/65.png'>
+		<box top='39' left='200' width='64' height='77'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/66.png'>
+		<box top='32' left='89' width='108' height='133'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/67.png'>
+		<box top='0' left='116' width='132' height='176'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/68.png'>
+		<box top='265' left='5' width='82' height='133'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/69.png'>
+		<box top='278' left='127' width='105' height='127'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/70.png'>
+		<box top='131' left='173' width='43' height='52'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/71.png'>
+		<box top='60' left='110' width='93' height='107'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/72.png'>
+		<box top='0' left='97' width='60' height='69'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/73.png'>
+		<box top='140' left='237' width='46' height='55'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/74.png'>
+		<box top='62' left='54' width='132' height='151'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/75.png'>
+		<box top='171' left='142' width='131' height='131'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/76.png'>
+		<box top='162' left='219' width='60' height='80'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/77.png'>
+		<box top='281' left='97' width='102' height='140'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/78.png'>
+		<box top='77' left='110' width='111' height='148'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/79.png'>
+		<box top='50' left='159' width='114' height='114'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/80.png'>
+		<box top='281' left='100' width='82' height='100'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/81.png'>
+		<box top='216' left='1' width='75' height='75'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/82.png'>
+		<box top='98' left='160' width='49' height='66'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/83.png'>
+		<box top='166' left='197' width='89' height='89'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/84.png'>
+		<box top='197' left='37' width='108' height='130'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/85.png'>
+		<box top='236' left='142' width='116' height='155'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/86.png'>
+		<box top='263' left='38' width='68' height='97'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/87.png'>
+		<box top='43' left='11' width='124' height='150'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/88.png'>
+		<box top='101' left='93' width='108' height='130'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/89.png'>
+		<box top='236' left='56' width='130' height='178'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/90.png'>
+		<box top='133' left='64' width='123' height='149'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/91.png'>
+		<box top='3' left='37' width='54' height='73'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/92.png'>
+		<box top='182' left='135' width='36' height='48'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/93.png'>
+		<box top='277' left='160' width='46' height='63'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/94.png'>
+		<box top='213' left='10' width='100' height='100'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/95.png'>
+		<box top='54' left='0' width='141' height='145'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/96.png'>
+		<box top='285' left='73' width='46' height='62'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/97.png'>
+		<box top='287' left='72' width='71' height='86'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/98.png'>
+		<box top='234' left='92' width='132' height='176'/>
+	</image>
+	<image file='/home/lpang/Documents/GitHub/imggen/images_goose/99.png'>
+		<box top='223' left='57' width='107' height='123'/>
+	</image>
+</images>
+</dataset>

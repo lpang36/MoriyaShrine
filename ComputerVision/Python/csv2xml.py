@@ -11,7 +11,7 @@ with open('/home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Data/training
 	data['Data'] = data['Data'].apply(lambda x:np.asarray(eval(str(x))[1:]))
 	count = 0
 	for item in data['Data']:
-		ofile.write('\t<image file=\''+str(count)+'.jpg\'>\n\
+		ofile.write('\t<image file=\'/home/lpang/Documents/GitHub/imggen/images_goose/'+str(count)+'.png\'>\n\
 \t\t<box top=\''+str(item[0])+'\' left=\''+str(item[1])+'\' width=\''+str(item[2])+'\' height=\''+str(item[3])+'\'/>\n\
 \t</image>\n')
 		count = count+1
