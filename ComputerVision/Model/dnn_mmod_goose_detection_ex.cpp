@@ -109,9 +109,9 @@ int main(int argc, char** argv) try
         auto dets = net(img);
         win.clear_overlay();
         win.set_image(img);
-        for (auto&& d : dets)
+        for (auto&& d : dets) {
             win.add_overlay(d);
-
+		}
         cout << "Hit enter to process the next image." << endl;
         cin.get();
     }

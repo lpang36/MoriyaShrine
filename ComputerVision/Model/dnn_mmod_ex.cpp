@@ -151,7 +151,7 @@ int main(int argc, char** argv) try
     trainer.set_learning_rate(0.1);
     trainer.be_verbose();
     trainer.set_synchronization_file("mmod_sync", std::chrono::minutes(5));
-    trainer.set_iterations_without_progress_threshold(300);
+    trainer.set_iterations_without_progress_threshold(100);
 
 
     // Now let's train the network.  We are going to use mini-batches of 150
@@ -167,7 +167,7 @@ int main(int argc, char** argv) try
     // hours.
     while(trainer.get_learning_rate() >= 1e-4)
     {
-        cropper(2, images_train, face_boxes_train, mini_batch_samples, mini_batch_labels);
+        cropper(10, images_train, face_boxes_train, mini_batch_samples, mini_batch_labels);
         // We can also randomly jitter the colors and that often helps a detector
         // generalize better to new images.
         for (auto&& img : mini_batch_samples)

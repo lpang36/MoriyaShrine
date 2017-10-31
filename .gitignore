@@ -5,10 +5,8 @@
 *.pyc
 *.h5
 *.out
-*.xml
 *.xsl
 /External
-*.dat
 *.cpp.o
 *.cmake
 *.check_cache
