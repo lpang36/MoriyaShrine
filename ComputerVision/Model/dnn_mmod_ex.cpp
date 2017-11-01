@@ -133,7 +133,7 @@ int main(int argc, char** argv) try
     // pick a good sliding window width and height.  It will also automatically set the
     // non-max-suppression parameters to something reasonable.  For further details see the
     // mmod_options documentation.
-    mmod_options options(face_boxes_train, 20,20);
+    mmod_options options(face_boxes_train, 40, 40);
     // The detector will automatically decide to use multiple sliding windows if needed.
     // For the face data, only one is needed however.
     cout << "num detector windows: "<< options.detector_windows.size() << endl;
@@ -151,7 +151,7 @@ int main(int argc, char** argv) try
     trainer.set_learning_rate(0.1);
     trainer.be_verbose();
     trainer.set_synchronization_file("mmod_sync", std::chrono::minutes(5));
-    trainer.set_iterations_without_progress_threshold(100);
+    trainer.set_iterations_without_progress_threshold(300);
 
 
     // Now let's train the network.  We are going to use mini-batches of 150
@@ -160,14 +160,14 @@ int main(int argc, char** argv) try
     std::vector<matrix<rgb_pixel>> mini_batch_samples;
     std::vector<std::vector<mmod_rect>> mini_batch_labels; 
     random_cropper cropper;
-    cropper.set_chip_dims(100, 100);
-    cropper.set_min_object_size(0.2);
+    cropper.set_chip_dims(150, 150);
+    cropper.set_min_object_size(0.3);
     dlib::rand rnd;
     // Run the trainer until the learning rate gets small.  This will probably take several
     // hours.
-    while(trainer.get_learning_rate() >= 1e-4)
+    while(trainer.get_learning_rate() >= 1e-6)
     {
-        cropper(10, images_train, face_boxes_train, mini_batch_samples, mini_batch_labels);
+        cropper(2, images_train, face_boxes_train, mini_batch_samples, mini_batch_labels);
         // We can also randomly jitter the colors and that often helps a detector
         // generalize better to new images.
         for (auto&& img : mini_batch_samples)

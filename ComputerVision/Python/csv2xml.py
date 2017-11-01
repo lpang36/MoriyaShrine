@@ -14,7 +14,7 @@ with open('/home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Data/training
 	for item in data[[str(col+1) for col in cols]].itertuples():
 		ofile.write('\t<image file=\'/home/lpang/Documents/GitHub/imggen/images_goose/'+str(count)+'.png\'>\n')
 		for i in range(0,3):
-			ofile.write('\t\t<box top=\''+str(item[i+1][0])+'\' left=\''+str(item[i+1][1])+'\' width=\''+str(item[i+1][2])+'\' height=\''+str(item[i+1][3])+'\'/>\n')
+			ofile.write('\t\t<box top=\''+str(item[i+1][1])+'\' left=\''+str(item[i+1][0])+'\' width=\''+str(item[i+1][2])+'\' height=\''+str(item[i+1][3])+'\'/>\n')
 		ofile.write('\t</image>\n')
 		count = count+1
 	ofile.write('</images>\n\

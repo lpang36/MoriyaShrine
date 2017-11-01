@@ -1,2 +1,2 @@
-./run.sh dnn_mmod_goose_detectioex /home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Data/mmod_network.dat /home/lpang/Documents/GitHub/imggen/images_goose/*.png
+./run.sh dnn_mmod_goose_detection_ex /home/lpang/Documents/GitHub/LaserTurret/ComputerVision/Data/mmod_network.dat /home/lpang/Documents/GitHub/imggen/images_goose/*.png
 
