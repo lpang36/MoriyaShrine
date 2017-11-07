@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 2.8.12)
+project(turret)
+include(../External/dlib-19.7/dlib/cmake)
+add_executable(dnn_mmod_face_detection_ex dnn_mmod_face_detection_ex.cpp)
+add_executable(interface interface.cpp)
+target_link_libraries(dnn_mmod_face_detection_ex dlib)
+target_link_libraries(interface dlib)

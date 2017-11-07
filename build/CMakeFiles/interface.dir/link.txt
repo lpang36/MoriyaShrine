@@ -1,0 +1,1 @@
+/usr/bin/c++    -Wreturn-type -O3 -DNDEBUG   CMakeFiles/interface.dir/interface.cpp.o  -o interface -rdynamic dlib_build/libdlib.a -lpthread -lnsl -lX11 -lpng -lz -ljpeg -lblas -llapack 

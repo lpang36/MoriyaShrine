@@ -64,6 +64,36 @@ using net_type = loss_mmod<con<1,9,9,1,1,rcon5<rcon5<rcon5<downsampler<input_rgb
 
 // ----------------------------------------------------------------------------------------
 
+void processFrame(matrix<rgb_pixel> img, net_type net, image_window win) {
+	// Upsampling the image will allow us to detect smaller faces but will cause the
+    // program to use more RAM and run longer.
+    while(img.size() < 300*300)
+        pyramid_up(img);
+    // Note that you can process a bunch of images in a std::vector at once and it runs
+    // much faster, since this will form mini-batches of images and therefore get
+    // better parallelism out of your GPU hardware.  However, all the images must be
+    // the same size.  To avoid this requirement on images being the same size we
+    // process them individually in this example.
+    auto dets = net(img);
+    win.clear_overlay();
+    win.set_image(img);
+    for (auto&& d : dets)
+        win.add_overlay(d);
+}
+
+auto processFrame(matrix<rgb_pixel> img, net_type net) {
+	// Upsampling the image will allow us to detect smaller faces but will cause the
+    // program to use more RAM and run longer.
+    while(img.size() < 300*300)
+        pyramid_up(img);
+    // Note that you can process a bunch of images in a std::vector at once and it runs
+    // much faster, since this will form mini-batches of images and therefore get
+    // better parallelism out of your GPU hardware.  However, all the images must be
+    // the same size.  To avoid this requirement on images being the same size we
+    // process them individually in this example.
+    auto dets = net(img);
+	return dets;
+}
 
 int main(int argc, char** argv) try
 {
@@ -84,24 +114,8 @@ int main(int argc, char** argv) try
     for (int i = 2; i < argc; ++i)
     {
         matrix<rgb_pixel> img;
-        load_image(img, argv[i]);
-
-        // Upsampling the image will allow us to detect smaller faces but will cause the
-        // program to use more RAM and run longer.
-        while(img.size() < 300*300)
-            pyramid_up(img);
-
-        // Note that you can process a bunch of images in a std::vector at once and it runs
-        // much faster, since this will form mini-batches of images and therefore get
-        // better parallelism out of your GPU hardware.  However, all the images must be
-        // the same size.  To avoid this requirement on images being the same size we
-        // process them individually in this example.
-        auto dets = net(img);
-        win.clear_overlay();
-        win.set_image(img);
-        for (auto&& d : dets)
-            win.add_overlay(d);
-
+        load_image(img, argv[i]); 
+		processFrame(img,net,win);
         cout << "Hit enter to process the next image." << endl;
         cin.get();
     }
