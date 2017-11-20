@@ -1,1 +1,0 @@
-/usr/bin/c++    -Wreturn-type -O3 -DNDEBUG   CMakeFiles/dnn_mmod_ex.dir/dnn_mmod_ex.cpp.o  -o dnn_mmod_ex -rdynamic dlib_build/libdlib.a -lpthread -lnsl -lX11 -lpng -lz -ljpeg -lblas -llapack 

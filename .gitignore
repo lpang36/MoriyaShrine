@@ -14,5 +14,7 @@
 *.includecache  
 *.marks
 *.cxx
+*.dat
 /ComputerVision/Build
+/Old/Build
 /build
