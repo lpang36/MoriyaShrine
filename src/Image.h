@@ -2,13 +2,11 @@
 #include <assert.h>
 #include <vector>
 
-
 class Image {
-  private:
+  public:
     int width, height, depth;
     std::vector< std::vector< std::vector<int> > > mat;
     std::vector< std::vector<bool> > valid;
-  public:
     Image(std::vector< std::vector< std::vector<int> > > img);
     Image(std::vector< std::vector< std::vector<int> > > img, std::vector< std::vector<bool> > val);
     ~Image();

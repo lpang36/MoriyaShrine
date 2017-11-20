@@ -1,4 +1,4 @@
-#include "image.h"
+#include "Image.h"
 
 using namespace std;
 
@@ -184,6 +184,12 @@ void Image::subtractColor(int r, int g, int b) {
       mat[i][j][0]-=r;
       mat[i][j][1]-=g;
       mat[i][j][2]-=b;
+      if (mat[i][j][0]<0)
+        mat[i][j][0] = 0;
+      if (mat[i][j][1]<0)
+        mat[i][j][1] = 0;
+      if (mat[i][j][2]<0)
+        mat[i][j][2] = 0;
     }
   }
 }
@@ -266,8 +272,8 @@ std::vector<int> Image::detectFace() {
   int thresh = 100;
   int w = 16;
   int h = 16;
-  Image temp(std::vector< std::vector< std::vector<int> > >(w,std::vector< std::vector<int> >(h,std::vector<int>(1,0))));
   int lim = 100;
+  Image temp(std::vector< std::vector< std::vector<int> > >(w,std::vector< std::vector<int> >(h,std::vector<int>(1,0))));
   colorFilter(rskin,bskin,gskin,tolerance);
   erode(rerode);
   dilate(rdilate);

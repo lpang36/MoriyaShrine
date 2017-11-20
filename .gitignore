@@ -6,7 +6,7 @@
 *.h5
 *.out
 *.xsl
-/External
+/external
 *.cpp.o
 *.cmake
 *.check_cache
@@ -16,5 +16,5 @@
 *.cxx
 *.dat
 /ComputerVision/Build
-/Old/Build
+/old/Build
 /build
