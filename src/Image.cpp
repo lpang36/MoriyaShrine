@@ -2,12 +2,15 @@
 
 using namespace std;
 
+Image::Image() {
+}
+
 Image::Image(std::vector< std::vector< std::vector<int> > > img) {
   mat = img;
   width = img.size();
   height = img[0].size();
   depth = img[0][0].size();
-  std::vector< std::vector<bool> > valid(width,std::vector<bool>(height,true));
+  valid = std::vector< std::vector<bool> >(width,std::vector<bool>(height,true));
 }
 
 Image::Image(std::vector< std::vector< std::vector<int> > > img, std::vector< std::vector<bool> > val) {
@@ -22,11 +25,20 @@ Image::~Image() {
 }
 
 void Image::colorFilter(int r, int g, int b, double tolerance) {
+  assert(depth==3);
+  double tuple[3];
+  tuple[0] = log(g+1);
+  tuple[1] = log(r+1);//-log(g+1);
+  tuple[2] = log(b+1);//-(log(r+1)+log(g+1))/2;
   for (int i = 0; i<width; i++) {
     for (int j = 0; j<height; j++) {
-      double dist = sqrt((mat[i][j][0]-r)*(mat[i][j][0]-r)+(mat[i][j][1]-g)*(mat[i][j][1]-g)+(mat[i][j][2]-b)*(mat[i][j][2]-b));
+      double sample[3];
+      sample[0] = log(mat[i][j][1]+1);
+      sample[1] = log(mat[i][j][0]+1);//-sample[0];
+      sample[2] = log(mat[i][j][2]+1);//-(sample[0]+sample[1])/2;
+      double dist = sqrt((sample[0]-tuple[0])*(sample[0]-tuple[0])+(sample[1]-tuple[1])*(sample[1]-tuple[1])+(sample[2]-tuple[2])*(sample[2]-tuple[2]));
       if (dist>tolerance) {
-        valid[width][height] = false;
+        valid[i][j] = false;
       }
     }
   }
@@ -35,38 +47,42 @@ void Image::colorFilter(int r, int g, int b, double tolerance) {
 void Image::erode(int r) {
   assert(r%2==1);
   int dim = r/2;
+  std::vector< std::vector<bool> > temp = valid;
   for (int i = 0; i<width; i++) {
     for (int j = 0; j<height; j++) {
       if (valid[i][j]) {
         for (int k = -dim; k<=dim; k++) {
           for (int l = -dim; l<=dim; l++) {
             if (!(i+k>=0&&i+k<width&&j+l>=0&&j+l<height&&valid[i+k][j+l])) 
-              valid[i][j] = false;
+              temp[i][j] = false;
           }
         }
       }
     }
   }
+  valid = temp;
 }
 
 void Image::dilate(int r) {
   assert(r%2==1);
   int dim = r/2;
+  std::vector< std::vector<bool> > temp = valid;
   for (int i = 0; i<width; i++) {
     for (int j = 0; j<height; j++) {
       if (valid[i][j]) {
         for (int k = -dim; k<=dim; k++) {
           for (int l = -dim; l<=dim; l++) {
             if (i+k>=0&&i+k<width&&j+l>=0&&j+l<height)
-              valid[i+k][j+l] = true;
+              temp[i+k][j+l] = true;
           }
         }
       }
     }
   }
+  valid = temp;
 }
 
-std::vector<int> Image::largestConnComp(Image img) { //implement with check for if no conncomps
+std::vector<int> Image::largestConnComp(Image& img) { //implement with check for if no conncomps
   std::vector< std::vector<bool> > checked(width,std::vector<bool>(height,false));
   std::vector<int> wvals(0);
   std::vector<int> hvals(0);
@@ -118,6 +134,7 @@ std::vector<int> Image::largestConnComp(Image img) { //implement with check for 
       }
     }
   }
+  checked = std::vector <std::vector<bool> >(width,std::vector<bool>(height,false));
   wvals.clear();
   hvals.clear();
   int wmin = width;
@@ -141,18 +158,22 @@ std::vector<int> Image::largestConnComp(Image img) { //implement with check for 
     if (l>hmax)
       hmax = l;
     if (k+1>=0&&k+1<width&&l+1>=0&&l+1<height&&!checked[k+1][l+1]&&valid[k+1][l+1]) {
+      checked[k+1][l+1] = true;
       wvals.push_back(k+1);
       hvals.push_back(l+1);
     }
     if (k+1>=0&&k+1<width&&l-1>=0&&l-1<height&&!checked[k+1][l-1]&&valid[k+1][l-1]) {
+      checked[k+1][l-1] = true;
       wvals.push_back(k+1);
       hvals.push_back(l-1);
     }
     if (k-1>=0&&k-1<width&&l+1>=0&&l+1<height&&!checked[k-1][l+1]&&valid[k-1][l+1]) {
+      checked[k-1][l+1] = true;
       wvals.push_back(k-1);
       hvals.push_back(l+1);
     }
     if (k-1>=0&&k-1<width&&l-1>=0&&l-1<height&&!checked[k-1][l-1]&&valid[k-1][l-1]) {
+      checked[k-1][l-1] = true;
       wvals.push_back(k-1);
       hvals.push_back(l-1);
     }
@@ -160,19 +181,19 @@ std::vector<int> Image::largestConnComp(Image img) { //implement with check for 
   img.width = wmax-wmin+1;
   img.height = hmax-hmin+1;
   img.depth = depth;
-  std::vector< std::vector< std::vector<int> > > tempMat(img.width, std::vector< std::vector<int> >(img.height,std::vector<int>(depth,true)));
-  std::vector< std::vector<bool> > tempValid(img.width,std::vector<bool>(img.height,false));
-  img.mat = tempMat;
-  img.valid = tempValid;
+  img.mat = std::vector< std::vector< std::vector<int> > >(img.width, std::vector< std::vector<int> >(img.height,std::vector<int>(depth)));
+  img.valid = std::vector< std::vector<bool> >(img.width,std::vector<bool>(img.height,false));
   for (int i = 0; i<img.width; i++) {
-    for (int j = 0; j<img.width; j++) {
-      img.mat[i][j] = mat[wmin+i][hmin+j];
+    for (int j = 0; j<img.height; j++) {
+      for (int k = 0; k<depth; k++) {
+        img.mat[i][j][k] = mat[wmin+i][hmin+j][k];
+      }
       img.valid[i][j] = valid[wmin+i][hmin+j];
     }
   }
   std::vector<int> out(0);
   out.push_back(wmin);
-  out.push_back(wmax);
+  out.push_back(hmin);
   out.push_back(img.width);
   out.push_back(img.height);
   return out;
@@ -181,15 +202,9 @@ std::vector<int> Image::largestConnComp(Image img) { //implement with check for 
 void Image::subtractColor(int r, int g, int b) {
   for (int i = 0; i<width; i++) {
     for (int j = 0; j<height; j++) {
-      mat[i][j][0]-=r;
-      mat[i][j][1]-=g;
-      mat[i][j][2]-=b;
-      if (mat[i][j][0]<0)
-        mat[i][j][0] = 0;
-      if (mat[i][j][1]<0)
-        mat[i][j][1] = 0;
-      if (mat[i][j][2]<0)
-        mat[i][j][2] = 0;
+      mat[i][j][0] = (mat[i][j][0]-r)*((mat[i][j][0]-r>0)*2-1);
+      mat[i][j][1] = (mat[i][j][1]-g)*((mat[i][j][1]-g>0)*2-1);
+      mat[i][j][2] = (mat[i][j][2]-b)*((mat[i][j][2]-b>0)*2-1);
     }
   }
 }
@@ -228,18 +243,19 @@ void Image::scaleDown(int w, int h) {
   int hratio = height/h;
   for (int i = 0; i<w; i++) {
     for (int j = 0; j<h; j++) {
+      int count = 0;
       for (int k = 0; k<wratio; k++) {
-        int count = 0;
         for (int l = 0; l<hratio; l++) {
           if (i*wratio+k>=0&&i*wratio+k<width&&j*hratio+l>=0&&j*hratio+l<height&&valid[i*wratio+k][j*hratio+l]) {
             temp[i][j][0]+=mat[i*wratio+k][j*hratio+l][0];
             count++;
           }
         }
-        temp[i][j][0] = temp[i][j][0]/count;
-        if (count<wratio*hratio/2)
-          tempValid[i][j] = false;
       }
+      if (count!=0)
+        temp[i][j][0] = temp[i][j][0]/count;
+      if (count<wratio*hratio/2)
+        tempValid[i][j] = false;
     }
   }
   mat = temp;
