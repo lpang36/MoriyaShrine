@@ -1,1 +1,1 @@
-g++ Image.cpp ImageTest.cpp -g `pkg-config --cflags --libs opencv`
+g++ Image.cpp Main.cpp -g

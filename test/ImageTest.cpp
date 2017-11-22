@@ -4,6 +4,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <assert.h>
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 using namespace cv;
@@ -117,6 +118,16 @@ void ImageTest::test (string filename) {
   temp.subtractColor(rskin,gskin,bskin);
   temp.flatten();
   temp.scaleDown(w,h);
+  ofstream file;
+  file.open("std.txt");
+  file << temp.width << " " << temp.height << endl;
+  for (int i = 0; i<temp.width; i++) {
+    for (int j = 0; j<temp.height; j++) {
+      file << temp.mat[i][j][0] << " ";
+    }
+    file << endl;
+  }       
+  file.close();
   //displayBW(temp,true);
   i.colorFilter(rskin,bskin,gskin,tolerance);
   displayFilter(i);

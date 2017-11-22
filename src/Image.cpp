@@ -298,5 +298,5 @@ std::vector<int> Image::detectFace(Image standard) {
   newimg.scaleDown(w,h);
   if (newimg.hammingDist(standard)<=lim) 
     return dims;
-  return std::vector<int>(4,0);
+  return std::vector<int>(0);
 }
