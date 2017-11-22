@@ -21,5 +21,5 @@ class Image {
     void threshhold(int thresh);
     void scaleDown(int w, int h);
     int hammingDist(Image img);
-    std::vector<int> detectFace();
+    std::vector<int> detectFace(Image standard);
 };

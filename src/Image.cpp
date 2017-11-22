@@ -28,15 +28,15 @@ void Image::colorFilter(int r, int g, int b, double tolerance) {
   assert(depth==3);
   double tuple[3];
   tuple[0] = log(g+1);
-  tuple[1] = log(r+1);//-log(g+1);
-  tuple[2] = log(b+1);//-(log(r+1)+log(g+1))/2;
+  tuple[1] = log(r+1)-log(g+1);
+  tuple[2] = log(b+1)-(log(r+1)+log(g+1))/2;
   for (int i = 0; i<width; i++) {
     for (int j = 0; j<height; j++) {
       double sample[3];
       sample[0] = log(mat[i][j][1]+1);
-      sample[1] = log(mat[i][j][0]+1);//-sample[0];
-      sample[2] = log(mat[i][j][2]+1);//-(sample[0]+sample[1])/2;
-      double dist = sqrt((sample[0]-tuple[0])*(sample[0]-tuple[0])+(sample[1]-tuple[1])*(sample[1]-tuple[1])+(sample[2]-tuple[2])*(sample[2]-tuple[2]));
+      sample[1] = log(mat[i][j][0]+1)-sample[0];
+      sample[2] = log(mat[i][j][2]+1)-(sample[0]+sample[1])/2;
+      double dist = sqrt((sample[0]-tuple[0])*(sample[0]-tuple[0])/(tuple[0]*tuple[0])+(sample[1]-tuple[1])*(sample[1]-tuple[1])/(tuple[1]*tuple[1])+(sample[2]-tuple[2])*(sample[2]-tuple[2])/(tuple[2]*tuple[2]));
       if (dist>tolerance) {
         valid[i][j] = false;
       }
@@ -82,7 +82,7 @@ void Image::dilate(int r) {
   valid = temp;
 }
 
-std::vector<int> Image::largestConnComp(Image& img) { //implement with check for if no conncomps
+std::vector<int> Image::largestConnComp(Image& img) {
   std::vector< std::vector<bool> > checked(width,std::vector<bool>(height,false));
   std::vector<int> wvals(0);
   std::vector<int> hvals(0);
@@ -234,8 +234,6 @@ void Image::threshhold(int thresh) {
 }
 
 void Image::scaleDown(int w, int h) {
-  assert(w<=width);
-  assert(h<=height);
   assert(depth==1);
   std::vector< std::vector< std::vector<int> > > temp(w,std::vector< std::vector<int> >(h,std::vector<int>(depth,0)));
   std::vector< std::vector<bool> > tempValid(w,std::vector<bool>(h,true));
@@ -278,28 +276,27 @@ int Image::hammingDist(Image img) {
   return count;
 }
 
-std::vector<int> Image::detectFace() {
-  int rskin = 0;
-  int gskin = 0;
-  int bskin = 0;
-  double tolerance = 50;
-  int rerode = 19;
-  int rdilate = 19;
-  int thresh = 100;
+std::vector<int> Image::detectFace(Image standard) {
+  int rskin = 255;
+  int gskin = 227;
+  int bskin = 159;
+  double tolerance = 16.5;
+  int rerode = 9;
+  int rdilate = 9;
+  int thresh = 50;
   int w = 16;
   int h = 16;
-  int lim = 100;
-  Image temp(std::vector< std::vector< std::vector<int> > >(w,std::vector< std::vector<int> >(h,std::vector<int>(1,0))));
+  int lim = 240;
   colorFilter(rskin,bskin,gskin,tolerance);
   erode(rerode);
   dilate(rdilate);
-  Image newimg(std::vector< std::vector< std::vector<int> > >(w,std::vector< std::vector<int> >(h,std::vector<int>(1,0))));
+  Image newimg = Image();
   std::vector<int> dims = largestConnComp(newimg);
-  newimg.subtractColor(rskin,bskin,gskin);
+  newimg.subtractColor(rskin,gskin,bskin);
   newimg.flatten();
   newimg.threshhold(thresh);
   newimg.scaleDown(w,h);
-  if (newimg.hammingDist(temp)<=lim) 
+  if (newimg.hammingDist(standard)<=lim) 
     return dims;
   return std::vector<int>(4,0);
 }
