@@ -17,9 +17,10 @@ class Image {
     void dilate(int r);
     std::vector<int> largestConnComp(Image& img);
     void subtractColor(int r, int g, int b);
+    std::vector<int> averageColor(std::vector<int> bounds);
     void flatten();
     void threshhold(int thresh);
     void scaleDown(int w, int h);
     int hammingDist(Image img);
-    std::vector<int> detectFace(Image standard);
+    std::vector<int> detectFace(Image& standard, int r, int g, int b, int& loss, std::vector<int>& params, const double IMG_LEARNING_RATE);
 };

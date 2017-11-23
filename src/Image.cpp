@@ -209,6 +209,27 @@ void Image::subtractColor(int r, int g, int b) {
   }
 }
 
+std::vector<int> Image::averageColor(std::vector<int> bounds) {
+  std::vector<int> avg(depth,0);
+  int count = 0;
+  for (int i = bounds[0]; i<bounds[0]+bounds[2]; i++) {
+    for (int j = bounds[1]; j<bounds[1]+bounds[3]; j++) {
+      if (valid[i][j]) {
+        count++;
+        for (int k = 0; k<depth; k++) { 
+          avg[k]+=mat[i][j][k];
+        }
+      }
+    }
+  }
+  if (count>0) {
+    for (int i = 0; i<depth; i++) {
+      avg[i] = avg[i]/count;
+    }
+  }
+  return avg;
+}
+
 void Image::flatten() {
   std::vector< std::vector< std::vector<int> > > temp(width,std::vector< std::vector<int> >(height,std::vector<int>(1,0)));
   for (int i = 0; i<width; i++) {
@@ -276,10 +297,7 @@ int Image::hammingDist(Image img) {
   return count;
 }
 
-std::vector<int> Image::detectFace(Image standard) {
-  int rskin = 255;
-  int gskin = 227;
-  int bskin = 159;
+std::vector<int> Image::detectFace(Image& standard, int rskin, int gskin, int bskin, int& loss, std::vector<int>& params, const double IMG_LEARNING_RATE) {
   double tolerance = 16.5;
   int rerode = 9;
   int rdilate = 9;
@@ -292,11 +310,19 @@ std::vector<int> Image::detectFace(Image standard) {
   dilate(rdilate);
   Image newimg = Image();
   std::vector<int> dims = largestConnComp(newimg);
+  params = averageColor(dims);
   newimg.subtractColor(rskin,gskin,bskin);
   newimg.flatten();
   newimg.threshhold(thresh);
   newimg.scaleDown(w,h);
-  if (newimg.hammingDist(standard)<=lim) 
+  loss = newimg.hammingDist(standard);
+  double alpha = loss*IMG_LEARNING_RATE;
+  for (int i = 0; i<w; i++) {
+    for (int j = 0; j<h; j++) {
+      standard.mat[i][j][0] = alpha*newimg.mat[i][j][0]+(1-alpha)*standard.mat[i][j][0];
+    }
+  }
+  if (loss<=lim) 
     return dims;
   return std::vector<int>(0);
 }
