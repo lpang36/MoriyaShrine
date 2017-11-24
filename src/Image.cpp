@@ -319,7 +319,7 @@ std::vector<int> Image::detectFace(Image& standard, int rskin, int gskin, int bs
   double alpha = loss*IMG_LEARNING_RATE;
   for (int i = 0; i<w; i++) {
     for (int j = 0; j<h; j++) {
-      standard.mat[i][j][0] = alpha*newimg.mat[i][j][0]+(1-alpha)*standard.mat[i][j][0];
+      standard.mat[i][j][0] = (int)(alpha*newimg.mat[i][j][0]+(1-alpha)*standard.mat[i][j][0]);
     }
   }
   if (loss<=lim) 

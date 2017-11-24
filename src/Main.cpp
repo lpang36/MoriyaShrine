@@ -75,6 +75,7 @@ int main() {
       r = params[0]*alpha+r*(1-alpha);
       g = params[1]*alpha+g*(1-alpha);
       b = params[2]*alpha+b*(1-alpha);
+      logfile << getCurrentTime() << "Adjusted skin color filter to (" << r << ", " << g << ", " << b << ")." << endl;
       logfile << getCurrentTime() << "Face detected in frame " << count << " with upper-left corner (" << dims[0] << ", " << dims[1] << ") and dimensions " << dims[2] << "x" << dims[3] << "." << endl;
       int aimWidth = dims[0]+dims[2]/2;
       int aimHeight = dims[1]+(int)(dims[3]*0.75); //small downward adjustment to prevent shining in eyes

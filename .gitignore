@@ -18,3 +18,5 @@
 /ComputerVision/Build
 /old/Build
 /build
+/backup
+*.o
