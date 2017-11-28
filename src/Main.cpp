@@ -12,6 +12,7 @@
 
 using namespace std;
 
+//define parameters
 int CAMERA_WIDTH = 640;
 int CAMERA_HEIGHT = 480;
 const double RGB_LEARNING_RATE = 0.1;
@@ -26,9 +27,11 @@ const char* LOG_FILE_NAME = "logfile.txt";
 const char* OUTPUT_FILE_NAME = "output.txt";
 const char* STD_FILE_NAME = "std.txt";
 
+//empty default constructor
 Image::Image() {
 }
 
+//constructor with image vector
 Image::Image(std::vector< std::vector< std::vector<int> > > img) {
   mat = img;
   width = img.size();
@@ -37,6 +40,7 @@ Image::Image(std::vector< std::vector< std::vector<int> > > img) {
   valid = std::vector< std::vector<bool> >(width,std::vector<bool>(height,true));
 }
 
+//constructor with image and filter vectors
 Image::Image(std::vector< std::vector< std::vector<int> > > img, std::vector< std::vector<bool> > val) {
   mat = img;
   width = img.size();
@@ -45,9 +49,12 @@ Image::Image(std::vector< std::vector< std::vector<int> > > img, std::vector< st
   valid = val;
 }
 
+//empty default destructor
 Image::~Image() {
 }
 
+//filter based on color
+//if color is not sufficiently close, filter for pixel is set to false
 void Image::colorFilter(int r, int g, int b, double tolerance) {
   assert(depth==3);
   double tuple[3];
@@ -57,6 +64,7 @@ void Image::colorFilter(int r, int g, int b, double tolerance) {
   for (int i = 0; i<width; i++) {
     for (int j = 0; j<height; j++) {
       double sample[3];
+      //logarithmic method based on work of Darrell et al. (1998)
       sample[0] = log(mat[i][j][1]+1);
       sample[1] = log(mat[i][j][0]+1)-sample[0];
       sample[2] = log(mat[i][j][2]+1)-(sample[0]+sample[1])/2;
@@ -68,6 +76,8 @@ void Image::colorFilter(int r, int g, int b, double tolerance) {
   }
 }
 
+//erosion operation
+//if not all pixels within an area of rxr are true, that pixel is set to false
 void Image::erode(int r) {
   assert(r%2==1);
   int dim = r/2;
@@ -87,6 +97,8 @@ void Image::erode(int r) {
   valid = temp;
 }
 
+//dilation operation
+//for every true pixel, set all pixels within an area of rxr to true
 void Image::dilate(int r) {
   assert(r%2==1);
   int dim = r/2;
@@ -106,6 +118,8 @@ void Image::dilate(int r) {
   valid = temp;
 }
 
+//finds the bounding box for the largest connected component of true pixels
+//returns a vector in the form [smallest x value, smallest y value, width, height]
 std::vector<int> Image::largestConnComp(Image& img) {
   std::vector< std::vector<bool> > checked(width,std::vector<bool>(height,false));
   std::vector<int> wvals(0);
@@ -113,6 +127,8 @@ std::vector<int> Image::largestConnComp(Image& img) {
   int wpoint;
   int hpoint;
   int max = 0;
+  //finds size of largest connected component and keeps track of one pixel in that component
+  //uses flood fill algorithm
   for (int i = 0; i<width; i++) {
     for (int j = 0; j<height; j++) {
       if (!checked[i][j]) {
@@ -167,6 +183,8 @@ std::vector<int> Image::largestConnComp(Image& img) {
   int hmax = 0;
   wvals.push_back(wpoint);
   hvals.push_back(hpoint);
+  //finds bounds on largest connected component starting with tracked pixel from above
+  //again uses flood fill algorithm
   while (wvals.size()!=0&&hvals.size()!=0) {
     int k = wvals.back();
     wvals.pop_back();
@@ -202,6 +220,7 @@ std::vector<int> Image::largestConnComp(Image& img) {
       hvals.push_back(l-1);
     }
   }
+  //writes all pixels and filter values within bounds to an image, passed by reference
   img.width = wmax-wmin+1;
   img.height = hmax-hmin+1;
   img.depth = depth;
@@ -223,6 +242,7 @@ std::vector<int> Image::largestConnComp(Image& img) {
   return out;
 }
 
+//subtracts an rgb value from all pixels
 void Image::subtractColor(int r, int g, int b) {
   for (int i = 0; i<width; i++) {
     for (int j = 0; j<height; j++) {
@@ -233,6 +253,9 @@ void Image::subtractColor(int r, int g, int b) {
   }
 }
 
+
+//average color of image within some bounds
+//returns vector in format [average r, average g, average b]
 std::vector<int> Image::averageColor(std::vector<int> bounds, bool val = true) {
   std::vector<int> avg(depth,0);
   int count = 0;
@@ -264,6 +287,7 @@ std::vector<int> Image::averageColor(std::vector<int> bounds, bool val = true) {
   return avg;
 }
 
+//converts to grayscale by averaging r, g, b
 void Image::flatten() {
   std::vector< std::vector< std::vector<int> > > temp(width,std::vector< std::vector<int> >(height,std::vector<int>(1,0)));
   for (int i = 0; i<width; i++) {
@@ -278,6 +302,7 @@ void Image::flatten() {
   depth = 1;
 }
 
+//threshholds grayscale image
 void Image::threshhold(int thresh) {
   assert(depth==1);
   for (int i = 0; i<width; i++) {
@@ -288,6 +313,8 @@ void Image::threshhold(int thresh) {
   }
 }
 
+//scales image down to given size
+//basic averaging algorithm
 void Image::scaleDown(int w, int h) {
   assert(depth==1);
   std::vector< std::vector< std::vector<int> > > temp(w,std::vector< std::vector<int> >(h,std::vector<int>(depth,0)));
@@ -317,6 +344,7 @@ void Image::scaleDown(int w, int h) {
   height = h;
 }
 
+//computes sum of absolute differences between each pixel in two images
 int Image::hammingDist(Image img) {
   assert(img.width==width);
   assert(img.height==height);
@@ -331,7 +359,11 @@ int Image::hammingDist(Image img) {
   return count;
 }
 
+//detects face in image and returns its bounds
+//returns a vector in the form [smallest x value, smallest y value, width, height]
+//based on work of Darrell et al. (1998)
 std::vector<int> Image::detectFace(Image& standard, int rskin, int gskin, int bskin, int& loss, std::vector<int>& params, const double IMG_LEARNING_RATE) {
+  //various parameters
   double tolerance = 16.5;
   int rerode = 9;
   int rdilate = 9;
@@ -339,28 +371,44 @@ std::vector<int> Image::detectFace(Image& standard, int rskin, int gskin, int bs
   int w = 16;
   int h = 16;
   int lim = 240;
+  //filters image based on similarity to skin color
   colorFilter(rskin,bskin,gskin,tolerance);
+  //image opening (erosion followed by dilation)
+  //generally eliminates noise
   erode(rerode);
   dilate(rdilate);
   Image newimg = Image();
+  //finds the largest connected component
+  //hopefully, this is where the face is
   std::vector<int> dims = largestConnComp(newimg);
+  //creates a mask of the face by subtracting average face color
   params = averageColor(dims);
   newimg.subtractColor(rskin,gskin,bskin);
+  //convert to grayscale
   newimg.flatten();
+  //threshhold to eliminate noise
   newimg.threshhold(thresh);
+  //scale down to compare to standard face mask
   newimg.scaleDown(w,h);
+  //compare to standard face mask
   loss = newimg.hammingDist(standard);
-  double alpha = loss*IMG_LEARNING_RATE;
-  for (int i = 0; i<w; i++) {
-    for (int j = 0; j<h; j++) {
-      standard.mat[i][j][0] = (int)(alpha*newimg.mat[i][j][0]+(1-alpha)*standard.mat[i][j][0]);
+  //if face is close enough to standard mask, return bounds
+  if (loss<=lim) {
+    //update standard mask 
+    //weighted average between standard mask and mask in current image
+    double alpha = loss*IMG_LEARNING_RATE;
+    for (int i = 0; i<w; i++) {
+      for (int j = 0; j<h; j++) {
+        standard.mat[i][j][0] = (int)(alpha*newimg.mat[i][j][0]+(1-alpha)*standard.mat[i][j][0]);
+      }
     }
-  }
-  if (loss<=lim) 
     return dims;
+  }
+  //return empty vector
   return std::vector<int>(0);
 }
 
+//gets current local time as string
 string getCurrentTime() {
   time_t rawtime;
   char buffer[25];
@@ -371,6 +419,7 @@ string getCurrentTime() {
 }
 
 int main(const int argc, const char* const argv[]) {
+  //various parameters
   int r = R_SKIN_INIT;
   int g = G_SKIN_INIT;
   int b = B_SKIN_INIT;
@@ -381,6 +430,7 @@ int main(const int argc, const char* const argv[]) {
   ofstream output;
   file.open(STD_FILE_NAME);
   logfile.open(LOG_FILE_NAME,std::ios::app);
+  //read standard face mask from file
   int w, h;
   file >> w;
   file >> h;
@@ -395,6 +445,7 @@ int main(const int argc, const char* const argv[]) {
   int count = 0;
   logfile << getCurrentTime() << "Starting face detection." << endl;
   while(true) {
+    //read jpg file using the stb_image library
     int bpp;
     uint8_t* rgb_image = stbi_load(IMAGE_FILE_NAME, &CAMERA_WIDTH, &CAMERA_HEIGHT, &bpp, 3);
     std::vector< std::vector< std::vector<int> > >mat(CAMERA_WIDTH,std::vector< std::vector<int> >(CAMERA_HEIGHT,std::vector<int>(3,0)));
@@ -410,12 +461,17 @@ int main(const int argc, const char* const argv[]) {
     logfile << getCurrentTime() << "Read frame." << endl;
     Image i(mat);
     std::vector<int> dims(0,4);
+    //face detection if command line argument is 0
     if (choice==0) {
       int loss = 0;
       std::vector<int> params(3,0);
+      //detect face
       dims = i.detectFace(standard,r,g,b,loss,params,IMG_LEARNING_RATE);
       cout << "processed image" << endl;
+      //if face detection is successful
       if (dims.size()>0) {
+        //update average face colour
+        //weighted average between standard color and average color in image
         double alpha = RGB_LEARNING_RATE*log(255-loss)/log(255);
         r = params[0]*alpha+r*(1-alpha);
         g = params[1]*alpha+g*(1-alpha);
@@ -426,31 +482,42 @@ int main(const int argc, const char* const argv[]) {
       else 
         logfile << getCurrentTime() << "No face detected in frame " << count << "." << endl;
     }
+    //laser pointer detection if command line argument is 1
     else {
       Image bw = i;
+      //convert to grayscale
       bw.flatten();
+      //threshhold to find bright point (i.e. the laser pointer, hopefully)
       bw.threshhold(200);
+      //find the largest (probably only) connected component
       Image newimg = Image();
       dims = bw.largestConnComp(newimg);
       cout << "processed image" << endl;
+      //if laser pointer detection successful
       if (dims.size()>0)
         logfile << getCurrentTime() << "Laser pointer detected in frame " << count << " at (" << (dims[0]+dims[2]/2) << ", " << (dims[1]+dims[3]/2) << ")." << endl;
       else
         logfile << getCurrentTime() << "No laser pointer detected in frame " << count << "." << endl;
     }
+    //dimensions of an area surrounding target detection
+    //whether face or laser pointer
     std::vector<int> extended(4,0);
     extended[0] = max(dims[0]-20,0);
     extended[1] = max(dims[1]-20,0);
     extended[2] = min(dims[2]+40,CAMERA_WIDTH-extended[0]);
     extended[3] = min(dims[3]+40,CAMERA_HEIGHT-extended[1]);
+    //compute average color in area
+    //scale down from 0-255 to 0-100
     std::vector<int> avg = i.averageColor(extended,choice!=0);
     for (int i = 0; i<avg.size(); i++) 
       avg[i] = avg[i]*100/255;
+    //write to output file for led control
     output.open(OUTPUT_FILE_NAME);
     output << avg[0] << endl << avg[1] << endl << avg[2] << endl;
     output.close();
     count++;
   }
+  //write updated standard face mask to file
   ofstream stdwrite;
   stdwrite.open(STD_FILE_NAME);
   stdwrite << standard.width << " " << standard.height << endl;
