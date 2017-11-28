@@ -80,3 +80,13 @@ Mon Nov 27 23:30:30 2017: Laser pointer detected in frame 0 at (227, 394).
 Mon Nov 27 23:30:30 2017: Read frame.
 Mon Nov 27 23:30:31 2017: Laser pointer detected in frame 1 at (227, 394).
 Mon Nov 27 23:30:31 2017: Read frame.
+Mon Nov 27 23:32:13 2017: Starting face detection.
+Mon Nov 27 23:32:13 2017: Read frame.
+Mon Nov 27 23:32:13 2017: Laser pointer detected in frame 0 at (227, 394).
+Mon Nov 27 23:32:14 2017: Read frame.
+Mon Nov 27 23:32:14 2017: Laser pointer detected in frame 1 at (227, 394).
+Mon Nov 27 23:32:14 2017: Read frame.
+Mon Nov 27 23:32:14 2017: Laser pointer detected in frame 2 at (227, 394).
+Mon Nov 27 23:32:15 2017: Read frame.
+Mon Nov 27 23:32:15 2017: Laser pointer detected in frame 3 at (227, 394).
+Mon Nov 27 23:32:15 2017: Read frame.

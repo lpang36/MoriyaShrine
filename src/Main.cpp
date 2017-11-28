@@ -441,6 +441,8 @@ int main(const int argc, const char* const argv[]) {
     extended[2] = min(dims[2]+40,CAMERA_WIDTH-extended[0]);
     extended[3] = min(dims[3]+40,CAMERA_HEIGHT-extended[1]);
     std::vector<int> avg = i.averageColor(extended,choice!=0);
+    for (int i = 0; i<avg.size(); i++) 
+      avg[i] = avg[i]*100/255;
     output.open(OUTPUT_FILE_NAME);
     output << avg[0] << endl << avg[1] << endl << avg[2] << endl;
     output.close();
