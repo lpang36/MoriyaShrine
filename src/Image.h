@@ -17,7 +17,7 @@ class Image {
     void dilate(int r);
     std::vector<int> largestConnComp(Image& img);
     void subtractColor(int r, int g, int b);
-    std::vector<int> averageColor(std::vector<int> bounds);
+    std::vector<int> averageColor(std::vector<int> bounds, bool val);
     void flatten();
     void threshhold(int thresh);
     void scaleDown(int w, int h);

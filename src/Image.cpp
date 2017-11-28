@@ -209,15 +209,25 @@ void Image::subtractColor(int r, int g, int b) {
   }
 }
 
-std::vector<int> Image::averageColor(std::vector<int> bounds) {
+std::vector<int> Image::averageColor(std::vector<int> bounds, bool val = true) {
   std::vector<int> avg(depth,0);
   int count = 0;
   for (int i = bounds[0]; i<bounds[0]+bounds[2]; i++) {
     for (int j = bounds[1]; j<bounds[1]+bounds[3]; j++) {
-      if (valid[i][j]) {
-        count++;
-        for (int k = 0; k<depth; k++) { 
-          avg[k]+=mat[i][j][k];
+      if (val) {
+        if (valid[i][j]) {
+          count++;
+          for (int k = 0; k<depth; k++) { 
+            avg[k]+=mat[i][j][k];
+          }
+        }
+      }
+      else {
+        if (!valid[i][j]) {
+          count++;
+          for (int k = 0; k<depth; k++) { 
+            avg[k]+=mat[i][j][k];
+          }
         }
       }
     }
