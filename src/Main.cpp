@@ -12,8 +12,8 @@
 
 using namespace std;
 
-const int CAMERA_WIDTH = 640;
-const int CAMERA_HEIGHT = 480;
+int CAMERA_WIDTH = 640;
+int CAMERA_HEIGHT = 480;
 const double RGB_LEARNING_RATE = 0.1;
 const double IMG_LEARNING_RATE = 0.1;
 const int R_SKIN_INIT = 255;
@@ -395,8 +395,8 @@ int main(const int argc, const char* const argv[]) {
   int count = 0;
   logfile << getCurrentTime() << "Starting face detection." << endl;
   while(true) {
-    int width, height, bpp;
-    uint8_t* rgb_image = stbi_load(IMAGE_FILE_NAME, &width, &height, &bpp, 3);
+    int bpp;
+    uint8_t* rgb_image = stbi_load(IMAGE_FILE_NAME, &CAMERA_WIDTH, &CAMERA_HEIGHT, &bpp, 3);
     std::vector< std::vector< std::vector<int> > >mat(CAMERA_WIDTH,std::vector< std::vector<int> >(CAMERA_HEIGHT,std::vector<int>(3,0)));
     for (int i = 0; i<CAMERA_WIDTH; i++) {
       for (int j = 0; j<CAMERA_HEIGHT; j++) {
@@ -405,6 +405,7 @@ int main(const int argc, const char* const argv[]) {
         }
       }
     }
+    cout << "read image" << endl;
     stbi_image_free(rgb_image);
     logfile << getCurrentTime() << "Read frame." << endl;
     Image i(mat);
@@ -413,6 +414,7 @@ int main(const int argc, const char* const argv[]) {
       int loss = 0;
       std::vector<int> params(3,0);
       dims = i.detectFace(standard,r,g,b,loss,params,IMG_LEARNING_RATE);
+      cout << "processed image" << endl;
       if (dims.size()>0) {
         double alpha = RGB_LEARNING_RATE*log(255-loss)/log(255);
         r = params[0]*alpha+r*(1-alpha);
@@ -430,6 +432,7 @@ int main(const int argc, const char* const argv[]) {
       bw.threshhold(200);
       Image newimg = Image();
       dims = bw.largestConnComp(newimg);
+      cout << "processed image" << endl;
       if (dims.size()>0)
         logfile << getCurrentTime() << "Laser pointer detected in frame " << count << " at (" << (dims[0]+dims[2]/2) << ", " << (dims[1]+dims[3]/2) << ")." << endl;
       else
