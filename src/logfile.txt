@@ -1,0 +1,5 @@
+Tue Nov 28 23:01:46 2017: Starting face detection.
+Tue Nov 28 23:01:46 2017: Read frame.
+Tue Nov 28 23:01:46 2017: Adjusted skin color filter to (234, 209, 148).
+Tue Nov 28 23:01:46 2017: Face detected in frame 0 with upper-left corner (15, 0) and dimensions 97x288.
+Tue Nov 28 23:01:46 2017: Wrote standard image template.
