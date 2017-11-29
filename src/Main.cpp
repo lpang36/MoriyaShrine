@@ -15,7 +15,7 @@ using namespace std;
 //define parameters
 int CAMERA_WIDTH = 640;
 int CAMERA_HEIGHT = 480;
-const int EXTEND_DIMS = 5;
+int EXTEND_DIMS = 5;
 const double RGB_LEARNING_RATE = 0.1;
 const double IMG_LEARNING_RATE = 0.1;
 const int R_SKIN_INIT = 255;
@@ -459,9 +459,10 @@ int main(const int argc, const char* const argv[]) {
   stbi_image_free(rgb_image);
   logfile << getCurrentTime() << "Read frame." << endl;
   Image i(mat);
-  std::vector<int> dims(0,4);
+  std::vector<int> dims(4,0);
   //face detection if command line argument is 0
   if (choice==0) {
+    EXTEND_DIMS = 5;
     int loss = 0;
     std::vector<int> params(3,0);
     //detect face
@@ -481,7 +482,8 @@ int main(const int argc, const char* const argv[]) {
       logfile << getCurrentTime() << "No face detected in frame " << count << "." << endl;
   }
   //laser pointer detection if command line argument is 1
-  else {
+  else if (choice==1) {
+    EXTEND_DIMS = 5;
     Image bw = i;
     //convert to grayscale
     bw.flatten();
@@ -495,6 +497,14 @@ int main(const int argc, const char* const argv[]) {
       logfile << getCurrentTime() << "Laser pointer detected in frame " << count << " at (" << (dims[0]+dims[2]/2) << ", " << (dims[1]+dims[3]/2) << ")." << endl;
     else
       logfile << getCurrentTime() << "No laser pointer detected in frame " << count << "." << endl;
+  }
+  //averaging over entire image
+  else {
+    EXTEND_DIMS = 0;
+    dims[0] = 0;
+    dims[1] = 0;
+    dims[2] = CAMERA_WIDTH;
+    dims[3] = CAMERA_HEIGHT;
   }
   //dimensions of an area surrounding target detection
   //whether face or laser pointer
