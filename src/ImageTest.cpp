@@ -119,11 +119,11 @@ void ImageTest::test (const char* filename) {
   stbi_image_free(rgb_image);
   //displayColor(i,0);
   int rskin = 255;
-  int gskin = 227;
-  int bskin = 159;
-  tolerance = 14;
-  int rerode = 9;
-  int rdilate = 9;
+  int gskin = 217;
+  int bskin = 139;
+  tolerance = 10;
+  int rerode = 3;
+  int rdilate = 5;
   int thresh = 50;
   int w = 16;
   int h = 16;

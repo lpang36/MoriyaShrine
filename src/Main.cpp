@@ -19,8 +19,8 @@ const int EXTEND_DIMS = 5;
 const double RGB_LEARNING_RATE = 0.1;
 const double IMG_LEARNING_RATE = 0.1;
 const int R_SKIN_INIT = 255;
-const int G_SKIN_INIT = 227;
-const int B_SKIN_INIT = 159;
+const int G_SKIN_INIT = 217;
+const int B_SKIN_INIT = 139;
 const int R_LASER = 255;
 const int G_LASER = 255;
 const int B_LASER = 255;
@@ -365,13 +365,13 @@ int Image::hammingDist(Image img) {
 //based on work of Darrell et al. (1998)
 std::vector<int> Image::detectFace(Image& standard, int rskin, int gskin, int bskin, int& loss, std::vector<int>& params, const double IMG_LEARNING_RATE) {
   //various parameters
-  double tolerance = 14;
-  int rerode = 9;
-  int rdilate = 9;
+  double tolerance = 10;
+  int rerode = 3;
+  int rdilate = 5;
   int thresh = 50;
   int w = 16;
   int h = 16;
-  int lim = 240;
+  int lim = 200;
   //filters image based on similarity to skin color
   colorFilter(rskin,bskin,gskin,tolerance);
   //image opening (erosion followed by dilation)
