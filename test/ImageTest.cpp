@@ -96,23 +96,21 @@ void ImageTest::test (const char* filename) {
       mat[j][i][0] = intensity.val[2];
     }
   }
-  int CAMERA_WIDTH = 640;
-  int CAMERA_HEIGHT = 480;
   int width, height, bpp;
     uint8_t* rgb_image = stbi_load(filename, &width, &height, &bpp, 3);
-    std::vector< std::vector< std::vector<int> > >mat2(CAMERA_WIDTH,std::vector< std::vector<int> >(CAMERA_HEIGHT,std::vector<int>(3,0)));
-    for (int i = 0; i<CAMERA_WIDTH; i++) {
-      for (int j = 0; j<CAMERA_HEIGHT; j++) {
+    std::vector< std::vector< std::vector<int> > >mat2(width,std::vector< std::vector<int> >(height,std::vector<int>(3,0)));
+    for (int i = 0; i<height; i++) {
+      for (int j = 0; j<width; j++) {
         for (int k = 0; k<3; k++) { 
-          mat2[i][j][k] = rgb_image[(i*CAMERA_HEIGHT+j)*bpp+k];
+          mat2[j][i][k] = (int)(rgb_image[(i*width+j)*bpp+k]);
         }
       }
     }
-  Image i(mat);
+  Image i(mat2);
   double tolerance = 0;
   i.flatten();
   i.threshhold(200);
-  displayFilter(i);
+  //displayFilter(i);
   Image newimg = Image();
   std::vector<int> dims = i.largestConnComp(newimg);
   displayBox(i,dims);

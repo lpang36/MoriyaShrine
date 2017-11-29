@@ -444,79 +444,73 @@ int main(const int argc, const char* const argv[]) {
   Image standard(standardMat);
   int count = 0;
   logfile << getCurrentTime() << "Starting face detection." << endl;
-  while(true) {
     //read jpg file using the stb_image library
-    int bpp;
-    uint8_t* rgb_image = stbi_load(IMAGE_FILE_NAME, &CAMERA_WIDTH, &CAMERA_HEIGHT, &bpp, 3);
-    std::vector< std::vector< std::vector<int> > >mat(CAMERA_WIDTH,std::vector< std::vector<int> >(CAMERA_HEIGHT,std::vector<int>(3,0)));
-    for (int i = 0; i<CAMERA_WIDTH; i++) {
-      for (int j = 0; j<CAMERA_HEIGHT; j++) {
-        for (int k = 0; k<3; k++) { 
-          mat[i][j][k] = (int)(rgb_image[(i*CAMERA_HEIGHT+j)*3+k]);
-        }
+  int bpp;
+  uint8_t* rgb_image = stbi_load(IMAGE_FILE_NAME, &CAMERA_WIDTH, &CAMERA_HEIGHT, &bpp, 3);
+  std::vector< std::vector< std::vector<int> > >mat(CAMERA_WIDTH,std::vector< std::vector<int> >(CAMERA_HEIGHT,std::vector<int>(3,0)));
+  for (int i = 0; i<CAMERA_HEIGHT; i++) {
+    for (int j = 0; j<CAMERA_WIDTH; j++) {
+      for (int k = 0; k<3; k++) { 
+        mat[j][i][k] = rgb_image[(i*CAMERA_WIDTH+j)*3+k];
       }
     }
-    cout << "read image" << endl;
-    stbi_image_free(rgb_image);
-    logfile << getCurrentTime() << "Read frame." << endl;
-    Image i(mat);
-    std::vector<int> dims(0,4);
-    //face detection if command line argument is 0
-    if (choice==0) {
-      int loss = 0;
-      std::vector<int> params(3,0);
-      //detect face
-      dims = i.detectFace(standard,r,g,b,loss,params,IMG_LEARNING_RATE);
-      cout << "processed image" << endl;
-      //if face detection is successful
-      if (dims.size()>0) {
-        //update average face colour
-        //weighted average between standard color and average color in image
-        double alpha = RGB_LEARNING_RATE*log(255-loss)/log(255);
-        r = params[0]*alpha+r*(1-alpha);
-        g = params[1]*alpha+g*(1-alpha);
-        b = params[2]*alpha+b*(1-alpha);
-        logfile << getCurrentTime() << "Adjusted skin color filter to (" << r << ", " << g << ", " << b << ")." << endl;
-        logfile << getCurrentTime() << "Face detected in frame " << count << " with upper-left corner (" << dims[0] << ", " << dims[1] << ") and dimensions " << dims[2] << "x" << dims[3] << "." << endl;
-      }
-      else 
-        logfile << getCurrentTime() << "No face detected in frame " << count << "." << endl;
-    }
-    //laser pointer detection if command line argument is 1
-    else {
-      Image bw = i;
-      //convert to grayscale
-      bw.flatten();
-      //threshhold to find bright point (i.e. the laser pointer, hopefully)
-      bw.threshhold(200);
-      //find the largest (probably only) connected component
-      Image newimg = Image();
-      dims = bw.largestConnComp(newimg);
-      cout << "processed image" << endl;
-      //if laser pointer detection successful
-      if (dims.size()>0)
-        logfile << getCurrentTime() << "Laser pointer detected in frame " << count << " at (" << (dims[0]+dims[2]/2) << ", " << (dims[1]+dims[3]/2) << ")." << endl;
-      else
-        logfile << getCurrentTime() << "No laser pointer detected in frame " << count << "." << endl;
-    }
-    //dimensions of an area surrounding target detection
-    //whether face or laser pointer
-    std::vector<int> extended(4,0);
-    extended[0] = max(dims[0]-20,0);
-    extended[1] = max(dims[1]-20,0);
-    extended[2] = min(dims[2]+40,CAMERA_WIDTH-extended[0]);
-    extended[3] = min(dims[3]+40,CAMERA_HEIGHT-extended[1]);
-    //compute average color in area
-    //scale down from 0-255 to 0-100
-    std::vector<int> avg = i.averageColor(extended,choice!=0);
-    for (int i = 0; i<avg.size(); i++) 
-      avg[i] = avg[i]*100/255;
-    //write to output file for led control
-    output.open(OUTPUT_FILE_NAME);
-    output << avg[0] << endl << avg[1] << endl << avg[2] << endl;
-    output.close();
-    count++;
   }
+  stbi_image_free(rgb_image);
+  logfile << getCurrentTime() << "Read frame." << endl;
+  Image i(mat);
+  std::vector<int> dims(0,4);
+  //face detection if command line argument is 0
+  if (choice==0) {
+    int loss = 0;
+    std::vector<int> params(3,0);
+    //detect face
+    dims = i.detectFace(standard,r,g,b,loss,params,IMG_LEARNING_RATE);
+    //if face detection is successful
+    if (dims.size()>0) {
+      //update average face colour
+      //weighted average between standard color and average color in image
+      double alpha = RGB_LEARNING_RATE*log(255-loss)/log(255);
+      r = params[0]*alpha+r*(1-alpha);
+      g = params[1]*alpha+g*(1-alpha);
+      b = params[2]*alpha+b*(1-alpha);
+      logfile << getCurrentTime() << "Adjusted skin color filter to (" << r << ", " << g << ", " << b << ")." << endl;
+      logfile << getCurrentTime() << "Face detected in frame " << count << " with upper-left corner (" << dims[0] << ", " << dims[1] << ") and dimensions " << dims[2] << "x" << dims[3] << "." << endl;
+    }
+    else 
+      logfile << getCurrentTime() << "No face detected in frame " << count << "." << endl;
+  }
+  //laser pointer detection if command line argument is 1
+  else {
+    Image bw = i;
+    //convert to grayscale
+    bw.flatten();
+    //threshhold to find bright point (i.e. the laser pointer, hopefully)
+    bw.threshhold(200);
+    //find the largest (probably only) connected component
+    Image newimg = Image();
+    dims = bw.largestConnComp(newimg);
+    //if laser pointer detection successful
+    if (dims.size()>0)
+      logfile << getCurrentTime() << "Laser pointer detected in frame " << count << " at (" << (dims[0]+dims[2]/2) << ", " << (dims[1]+dims[3]/2) << ")." << endl;
+    else
+      logfile << getCurrentTime() << "No laser pointer detected in frame " << count << "." << endl;
+  }
+  //dimensions of an area surrounding target detection
+  //whether face or laser pointer
+  std::vector<int> extended(4,0);
+  extended[0] = max(dims[0]-20,0);
+  extended[1] = max(dims[1]-20,0);
+  extended[2] = min(dims[2]+40,CAMERA_WIDTH-extended[0]);
+  extended[3] = min(dims[3]+40,CAMERA_HEIGHT-extended[1]);
+  //compute average color in area
+  //scale down from 0-255 to 0-100
+  std::vector<int> avg = i.averageColor(extended,choice!=0);
+  for (int i = 0; i<avg.size(); i++) 
+    avg[i] = avg[i]*100/255;
+  //write to output file for led control
+  output.open(OUTPUT_FILE_NAME);
+  output << avg[0] << endl << avg[1] << endl << avg[2] << endl;
+  output.close();
   //write updated standard face mask to file
   ofstream stdwrite;
   stdwrite.open(STD_FILE_NAME);
@@ -529,6 +523,5 @@ int main(const int argc, const char* const argv[]) {
   }       
   stdwrite.close();
   logfile << getCurrentTime() << "Wrote standard image template." << endl;
-  logfile << getCurrentTime() << "Shutting down." << endl;
   logfile.close();
 }
