@@ -34,3 +34,7 @@ Wed Nov 29 21:05:22 2017: Wrote standard image template.
 Wed Nov 29 21:07:13 2017: Starting face detection.
 Wed Nov 29 21:07:13 2017: Read frame.
 Wed Nov 29 21:07:13 2017: Laser pointer detected in frame 0 at (149, 136).
+Wed Nov 29 23:04:42 2017: Starting face detection.
+Wed Nov 29 23:04:42 2017: Read frame.
+Wed Nov 29 23:04:42 2017: Wrote RGB color (68, 33, 31) to LED.
+Wed Nov 29 23:04:42 2017: Wrote standard image template.

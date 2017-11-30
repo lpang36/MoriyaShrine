@@ -109,13 +109,14 @@ void ImageTest::test (const char* filename) {
       }
     }
   Image i(mat2);
+  std::vector<int> dims;
   double tolerance = 0;
-  i.flatten();
-  i.threshhold(235);
+  //i.flatten();
+  //i.threshhold(235);
   //displayFilter(i);
   Image newimg = Image();
-  std::vector<int> dims = i.largestConnComp(newimg,10);
-  displayBox(i,dims);
+  //dims = i.largestConnComp(newimg,10);
+  //displayBox(i,dims);
   stbi_image_free(rgb_image);
   //displayColor(i,0);
   int rskin = 255;

@@ -516,8 +516,15 @@ int main(const int argc, const char* const argv[]) {
   //compute average color in area
   //scale down from 0-255 to 0-100
   std::vector<int> avg = i.averageColor(extended,choice!=0);
+  //color adjustments for emphasis
   for (int i = 0; i<avg.size(); i++) 
     avg[i] = avg[i]*100/255;
+  if (avg[0]>=avg[1]&&avg[0]>=avg[2])
+    avg[0] = min(2*avg[0],100);
+  if (avg[1]>=avg[0]&&avg[1]>=avg[2])
+    avg[1] = min(2*avg[1],100);
+  if (avg[2]>=avg[0]&&avg[2]>=avg[1])
+    avg[2] = min(2*avg[2],100);
   logfile << getCurrentTime() << "Wrote RGB color (" << avg[0] << ", " << avg[1] << ", " << avg[2] << ") to LED." << endl;
   //write to output file for led control
   output.open(OUTPUT_FILE_NAME);
