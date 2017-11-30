@@ -125,15 +125,17 @@ std::vector<int> Image::largestConnComp(Image& img, int maxSize = INT_MAX) {
   std::vector< std::vector<bool> > checked(width,std::vector<bool>(height,false));
   std::vector<int> wvals(0);
   std::vector<int> hvals(0);
-  int wpoint;
-  int hpoint;
+  int wpoint = -1;
+  int hpoint = -1;
   int max = 0;
   //finds size of largest connected component and keeps track of one pixel in that component
   //uses flood fill algorithm
   for (int i = 0; i<width; i++) {
     for (int j = 0; j<height; j++) {
       if (!checked[i][j]) {
-        int count = 0;
+        wvals.clear();
+        hvals.clear();
+        int count = 1;
         wvals.push_back(i);
         hvals.push_back(j);
         while (wvals.size()!=0&&hvals.size()!=0) {
@@ -175,6 +177,8 @@ std::vector<int> Image::largestConnComp(Image& img, int maxSize = INT_MAX) {
       }
     }
   }
+  if (wpoint==-1&&hpoint==-1)
+    return std::vector<int>(0);
   checked = std::vector <std::vector<bool> >(width,std::vector<bool>(height,false));
   wvals.clear();
   hvals.clear();
@@ -488,10 +492,31 @@ int main(const int argc, const char* const argv[]) {
     //convert to grayscale
     bw.flatten();
     //threshhold to find bright point (i.e. the laser pointer, hopefully)
-    bw.threshhold(235);
-    //find the largest (probably only) connected component
-    Image newimg = Image();
-    dims = bw.largestConnComp(newimg,50);
+    bw.threshhold(200);
+    while (dims.size()>0) {
+      //find the largest (probably only) connected component
+      Image newimg = Image();
+      dims = bw.largestConnComp(newimg,50);
+      //detect dominant red color
+      int redCount = 0;
+      for (int j = dims[0]; j<dims[0]+dims[2]; j++) {
+        for (int k = dims[1]; k<dims[1]+dims[3]; k++) {
+          if (i.mat[j][k][0]>=i.mat[j][k][1]&&i.mat[j][k][0]>=i.mat[j][k][2])
+            redCount++;
+        }
+      }
+      //if red is dominant and area is small, pointer detected
+      if (redCount*2>dims[2]*dims[3]&&dims[2]<10&&dims[3]<10)
+        break;
+      //otherwise, set current connected component to false
+      else {
+        for (int j = dims[0]; j<dims[0]+dims[2]; j++) {
+          for (int k = dims[1]; k<dims[1]+dims[3]; k++) {
+            bw.valid[j][k] = false;
+          }
+        }
+      }
+    }
     //if laser pointer detection successful
     if (dims.size()>0)
       logfile << getCurrentTime() << "Laser pointer detected in frame " << count << " at (" << (dims[0]+dims[2]/2) << ", " << (dims[1]+dims[3]/2) << ")." << endl;

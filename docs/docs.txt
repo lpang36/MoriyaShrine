@@ -42,7 +42,7 @@ First, the image is filtered based on similarity to skin color. Then, an opening
 
 Laser Detection Algorithm
 
-This algorithm is original and considerably simpler than the face detection algorithm. The image is converted to grayscale and then threshholded. Typically, as our webcam produces rather dark images, the laser will be the only object sufficiently bright. This algorithm has the advantage of being independent of laser pointer color.
+This algorithm is original and considerably simpler than the face detection algorithm. The image is converted to grayscale and then threshholded. Typically, as our webcam produces rather dark images, the laser will be the only object sufficiently bright. However, if other bright objects are in the image, some checks are implemented to see if the detected area is really a laser. If the area is small enough and the most common color is red (we are using a red laser), it is considered a laser. Otherwise, we repeat this process with a different area, until a laser is found or all areas are processed.
 
 Machine Learning
 
