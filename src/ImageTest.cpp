@@ -114,7 +114,7 @@ void ImageTest::test (const char* filename) {
   i.threshhold(235);
   //displayFilter(i);
   Image newimg = Image();
-  std::vector<int> dims = i.largestConnComp(newimg,INT_MAX);
+  std::vector<int> dims = i.largestConnComp(newimg,10);
   displayBox(i,dims);
   stbi_image_free(rgb_image);
   //displayColor(i,0);

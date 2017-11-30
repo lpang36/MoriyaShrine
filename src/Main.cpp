@@ -468,6 +468,7 @@ int main(const int argc, const char* const argv[]) {
     dims = i.detectFace(standard,r,g,b,loss,params,IMG_LEARNING_RATE);
     //if face detection is successful
     if (dims.size()>0) {
+      EXTEND_DIMS = 20;
       //update average face colour
       //weighted average between standard color and average color in image
       double alpha = RGB_LEARNING_RATE*log(255-loss)/log(255);
@@ -517,6 +518,7 @@ int main(const int argc, const char* const argv[]) {
   std::vector<int> avg = i.averageColor(extended,choice!=0);
   for (int i = 0; i<avg.size(); i++) 
     avg[i] = avg[i]*100/255;
+  logfile << getCurrentTime() << "Wrote RGB color (" << avg[0] << ", " << avg[1] << ", " << avg[2] << ") to LED." << endl;
   //write to output file for led control
   output.open(OUTPUT_FILE_NAME);
   output << avg[0] << endl << avg[1] << endl << avg[2] << endl;
