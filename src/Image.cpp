@@ -82,13 +82,15 @@ void Image::dilate(int r) {
   valid = temp;
 }
 
-std::vector<int> Image::largestConnComp(Image& img) {
+std::vector<int> Image::largestConnComp(Image& img, int maxSize = INT_MAX) {
   std::vector< std::vector<bool> > checked(width,std::vector<bool>(height,false));
   std::vector<int> wvals(0);
   std::vector<int> hvals(0);
   int wpoint;
   int hpoint;
   int max = 0;
+  //finds size of largest connected component and keeps track of one pixel in that component
+  //uses flood fill algorithm
   for (int i = 0; i<width; i++) {
     for (int j = 0; j<height; j++) {
       if (!checked[i][j]) {
@@ -126,7 +128,7 @@ std::vector<int> Image::largestConnComp(Image& img) {
             count++;
           }
         }
-        if (count>max) {
+        if (count>max&&count<=maxSize) {
           max = count;
           wpoint = i;
           hpoint = j;
@@ -143,6 +145,8 @@ std::vector<int> Image::largestConnComp(Image& img) {
   int hmax = 0;
   wvals.push_back(wpoint);
   hvals.push_back(hpoint);
+  //finds bounds on largest connected component starting with tracked pixel from above
+  //again uses flood fill algorithm
   while (wvals.size()!=0&&hvals.size()!=0) {
     int k = wvals.back();
     wvals.pop_back();
@@ -178,6 +182,7 @@ std::vector<int> Image::largestConnComp(Image& img) {
       hvals.push_back(l-1);
     }
   }
+  //writes all pixels and filter values within bounds to an image, passed by reference
   img.width = wmax-wmin+1;
   img.height = hmax-hmin+1;
   img.depth = depth;

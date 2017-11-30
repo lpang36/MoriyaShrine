@@ -1,5 +1,6 @@
 #include <math.h>
 #include <assert.h>
+#include <limits.h>
 #include <vector>
 #include <iostream>
 
@@ -15,7 +16,7 @@ class Image {
     void colorFilter(int r, int g, int b, double tolerance);
     void erode(int r);
     void dilate(int r);
-    std::vector<int> largestConnComp(Image& img);
+    std::vector<int> largestConnComp(Image& img, int maxSize);
     void subtractColor(int r, int g, int b);
     std::vector<int> averageColor(std::vector<int> bounds, bool val);
     void flatten();

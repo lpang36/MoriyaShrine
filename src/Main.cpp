@@ -121,7 +121,7 @@ void Image::dilate(int r) {
 
 //finds the bounding box for the largest connected component of true pixels
 //returns a vector in the form [smallest x value, smallest y value, width, height]
-std::vector<int> Image::largestConnComp(Image& img) {
+std::vector<int> Image::largestConnComp(Image& img, int maxSize = INT_MAX) {
   std::vector< std::vector<bool> > checked(width,std::vector<bool>(height,false));
   std::vector<int> wvals(0);
   std::vector<int> hvals(0);
@@ -167,7 +167,7 @@ std::vector<int> Image::largestConnComp(Image& img) {
             count++;
           }
         }
-        if (count>max) {
+        if (count>max&&count<=maxSize) {
           max = count;
           wpoint = i;
           hpoint = j;
@@ -253,7 +253,6 @@ void Image::subtractColor(int r, int g, int b) {
     }
   }
 }
-
 
 //average color of image within some bounds
 //returns vector in format [average r, average g, average b]
@@ -488,10 +487,10 @@ int main(const int argc, const char* const argv[]) {
     //convert to grayscale
     bw.flatten();
     //threshhold to find bright point (i.e. the laser pointer, hopefully)
-    bw.threshhold(200);
+    bw.threshhold(235);
     //find the largest (probably only) connected component
     Image newimg = Image();
-    dims = bw.largestConnComp(newimg);
+    dims = bw.largestConnComp(newimg,50);
     //if laser pointer detection successful
     if (dims.size()>0)
       logfile << getCurrentTime() << "Laser pointer detected in frame " << count << " at (" << (dims[0]+dims[2]/2) << ", " << (dims[1]+dims[3]/2) << ")." << endl;

@@ -18,3 +18,19 @@ Wed Nov 29 09:19:17 2017: Read frame.
 Wed Nov 29 09:19:40 2017: Starting face detection.
 Wed Nov 29 09:19:40 2017: Read frame.
 Wed Nov 29 09:19:40 2017: Wrote standard image template.
+Wed Nov 29 18:18:23 2017: Starting face detection.
+Wed Nov 29 18:18:23 2017: Read frame.
+Wed Nov 29 18:18:23 2017: Laser pointer detected in frame 0 at (349, 25).
+Wed Nov 29 18:18:23 2017: Wrote standard image template.
+Wed Nov 29 21:04:52 2017: Starting face detection.
+Wed Nov 29 21:04:57 2017: Starting face detection.
+Wed Nov 29 21:04:57 2017: Read frame.
+Wed Nov 29 21:04:57 2017: Laser pointer detected in frame 0 at (485, 310).
+Wed Nov 29 21:04:57 2017: Wrote standard image template.
+Wed Nov 29 21:05:22 2017: Starting face detection.
+Wed Nov 29 21:05:22 2017: Read frame.
+Wed Nov 29 21:05:22 2017: Laser pointer detected in frame 0 at (149, 136).
+Wed Nov 29 21:05:22 2017: Wrote standard image template.
+Wed Nov 29 21:07:13 2017: Starting face detection.
+Wed Nov 29 21:07:13 2017: Read frame.
+Wed Nov 29 21:07:13 2017: Laser pointer detected in frame 0 at (149, 136).

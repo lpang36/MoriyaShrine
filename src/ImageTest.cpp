@@ -110,12 +110,12 @@ void ImageTest::test (const char* filename) {
     }
   Image i(mat2);
   double tolerance = 0;
-  //i.flatten();
-  //i.threshhold(200);
+  i.flatten();
+  i.threshhold(235);
   //displayFilter(i);
-  //Image newimg = Image();
-  //std::vector<int> dims = i.largestConnComp(newimg);
-  //displayBox(i,dims);
+  Image newimg = Image();
+  std::vector<int> dims = i.largestConnComp(newimg,INT_MAX);
+  displayBox(i,dims);
   stbi_image_free(rgb_image);
   //displayColor(i,0);
   int rskin = 255;
@@ -165,8 +165,8 @@ void ImageTest::test (const char* filename) {
   displayFilter(i);
   i.dilate(rdilate);
   displayFilter(i);
-  Image newimg = Image();
-  std::vector<int> dims = i.largestConnComp(newimg);
+  //Image newimg = Image();
+  dims = i.largestConnComp(newimg,INT_MAX);
   for (int i = 0; i<dims.size(); i++)
     cout << dims[i] << " ";
   cout << endl;
