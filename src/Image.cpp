@@ -95,7 +95,7 @@ std::vector<int> Image::largestConnComp(Image& img, int maxSize = INT_MAX) {
   //uses flood fill algorithm
   for (int i = 0; i<width; i++) {
     for (int j = 0; j<height; j++) {
-      if (!checked[i][j]) {
+      if (!checked[i][j]&&valid[i][j]) {
         wvals.clear();
         hvals.clear();
         int count = 1;

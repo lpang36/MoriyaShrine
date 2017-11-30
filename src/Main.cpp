@@ -132,7 +132,7 @@ std::vector<int> Image::largestConnComp(Image& img, int maxSize = INT_MAX) {
   //uses flood fill algorithm
   for (int i = 0; i<width; i++) {
     for (int j = 0; j<height; j++) {
-      if (!checked[i][j]) {
+      if (!checked[i][j]&&valid[i][j]) {
         wvals.clear();
         hvals.clear();
         int count = 1;
@@ -492,7 +492,7 @@ int main(const int argc, const char* const argv[]) {
     //convert to grayscale
     bw.flatten();
     //threshhold to find bright point (i.e. the laser pointer, hopefully)
-    bw.threshhold(200);
+    bw.threshhold(235);
     while (dims.size()>0) {
       //find the largest (probably only) connected component
       Image newimg = Image();
@@ -506,7 +506,7 @@ int main(const int argc, const char* const argv[]) {
         }
       }
       //if red is dominant and area is small, pointer detected
-      if (redCount*2>dims[2]*dims[3]&&dims[2]<10&&dims[3]<10)
+      if ((redCount+0.0)/(dims[2]*dims[3])>0.8&&dims[2]<10&&dims[3]<10)
         break;
       //otherwise, set current connected component to false
       else {

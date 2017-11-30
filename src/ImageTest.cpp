@@ -111,14 +111,15 @@ void ImageTest::test (const char* filename) {
   Image i(mat2);
   std::vector<int> dims(4,0);
   double tolerance = 0;
-  i.flatten();
-  i.threshhold(200);
+  Image bw = i;
+  bw.flatten();
+  bw.threshhold(235);
   //displayFilter(i);
   Image newimg = Image();
   while (dims.size()>0) {
       //find the largest (probably only) connected component
       Image newimg = Image();
-      dims = i.largestConnComp(newimg,50);
+      dims = bw.largestConnComp(newimg,50);
       //detect dominant red color
       int redCount = 0;
       for (int j = dims[0]; j<dims[0]+dims[2]; j++) {
@@ -127,18 +128,20 @@ void ImageTest::test (const char* filename) {
             redCount++;
         }
       }
+    cout << ((redCount+0.0)/(dims[2]*dims[3])) << endl;
+      cout << dims[0] << " " << dims[1] << endl;
       //if red is dominant, pointer detected
-      if (redCount*2>dims[2]*dims[3]&&dims[2]<10&&dims[3]<10)
+      if ((redCount+0.0)/(dims[2]*dims[3])>0.8&&dims[2]<10&&dims[3]<10)
         break;
     else {
         for (int j = dims[0]; j<dims[0]+dims[2]; j++) {
           for (int k = dims[1]; k<dims[1]+dims[3]; k++) {
-            i.valid[j][k] = false;
+            bw.valid[j][k] = false;
           }
         }
-      }
+     }
     }
-  displayBox(i,dims);
+  displayBox(bw,dims);
   stbi_image_free(rgb_image);
   //displayColor(i,0);
   int rskin = 255;
