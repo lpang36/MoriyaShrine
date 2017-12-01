@@ -485,7 +485,7 @@ int main(const int argc, const char* const argv[]) {
     //detect face
     dims = i.detectFace(standard,r,g,b,loss,params,IMG_LEARNING_RATE,&logfile,getCurrentTime());
     //if face detection is successful
-    if (dims.size()>0) {
+    if (dims.size()>0&&dims[2]>=15&&dims[3]>=15) {
       EXTEND_DIMS = 20;
       //update average face colour
       //weighted average between standard color and average color in image
