@@ -366,7 +366,7 @@ int Image::hammingDist(Image img) {
 //detects face in image and returns its bounds
 //returns a vector in the form [smallest x value, smallest y value, width, height]
 //based on work of Darrell et al. (1998)
-std::vector<int> Image::detectFace(Image& standard, int rskin, int gskin, int bskin, int& loss, std::vector<int>& params, const double IMG_LEARNING_RATE) {
+std::vector<int> Image::detectFace(Image& standard, int rskin, int gskin, int bskin, int& loss, std::vector<int>& params, const double IMG_LEARNING_RATE, ofstream* logfile, string time) {
   //various parameters
   double tolerance = 10;
   int rerode = 3;
@@ -377,6 +377,7 @@ std::vector<int> Image::detectFace(Image& standard, int rskin, int gskin, int bs
   int lim = 200;
   //filters image based on similarity to skin color
   colorFilter(rskin,bskin,gskin,tolerance);
+  *logfile << time << "Applied color filter to image." << endl;
   //image opening (erosion followed by dilation)
   //generally eliminates noise
   erode(rerode);
@@ -385,30 +386,38 @@ std::vector<int> Image::detectFace(Image& standard, int rskin, int gskin, int bs
   //finds the largest connected component
   //hopefully, this is where the face is
   std::vector<int> dims = largestConnComp(newimg);
-  //creates a mask of the face by subtracting average face color
-  params = averageColor(dims);
-  newimg.subtractColor(rskin,gskin,bskin);
-  //convert to grayscale
-  newimg.flatten();
-  //threshhold to eliminate noise
-  newimg.threshhold(thresh);
-  //scale down to compare to standard face mask
-  newimg.scaleDown(w,h);
-  //compare to standard face mask
-  loss = newimg.hammingDist(standard);
-  //if face is close enough to standard mask, return bounds
-  if (loss<=lim) {
-    //update standard mask 
-    //weighted average between standard mask and mask in current image
-    double alpha = loss*IMG_LEARNING_RATE;
-    for (int i = 0; i<w; i++) {
-      for (int j = 0; j<h; j++) {
-        standard.mat[i][j][0] = (int)(alpha*newimg.mat[i][j][0]+(1-alpha)*standard.mat[i][j][0]);
+  if (dims.size()>0) {
+    *logfile << time << "Found possible face candidate." << endl;
+    //creates a mask of the face by subtracting average face color
+    params = averageColor(dims);
+    newimg.subtractColor(rskin,gskin,bskin);
+    //convert to grayscale
+    newimg.flatten();
+    //threshhold to eliminate noise
+    newimg.threshhold(thresh);
+    //scale down to compare to standard face mask
+    newimg.scaleDown(w,h);
+    *logfile << time << "Created face mask from image." << endl;
+    //compare to standard face mask
+    loss = newimg.hammingDist(standard);
+    *logfile << time << "Compared image mask to standard face mask." << endl;
+    //if face is close enough to standard mask, return bounds
+    if (loss<=lim) {
+      //update standard mask 
+      //weighted average between standard mask and mask in current image
+      double alpha = loss*IMG_LEARNING_RATE;
+      for (int i = 0; i<w; i++) {
+        for (int j = 0; j<h; j++) {
+          standard.mat[i][j][0] = (int)(alpha*newimg.mat[i][j][0]+(1-alpha)*standard.mat[i][j][0]);
+        }
       }
+      return dims;
     }
-    return dims;
+    else
+      *logfile << time << "Warning: Face candidate not sufficiently similar to standard face mask." << endl;
   }
   //return empty vector
+  *logfile << time << "Warning: No face candidate found." << endl;
   return std::vector<int>(0);
 }
 
@@ -427,13 +436,17 @@ int main(const int argc, const char* const argv[]) {
   int r = R_SKIN_INIT;
   int g = G_SKIN_INIT;
   int b = B_SKIN_INIT;
-  int choice = atoi(argv[1]);
-  const char* IMAGE_FILE_NAME = argv[2];
   ifstream file;
   ofstream logfile;
   ofstream output;
   file.open(STD_FILE_NAME);
   logfile.open(LOG_FILE_NAME,std::ios::app);
+  if (argc!=3) {
+    logfile << getCurrentTime() << "Error: Insufficient command line arguments." << endl;
+    return -1;
+  }
+  int choice = atoi(argv[1]);
+  const char* IMAGE_FILE_NAME = argv[2];
   //read standard face mask from file
   int w, h;
   file >> w;
@@ -445,10 +458,10 @@ int main(const int argc, const char* const argv[]) {
     }
   }
   file.close();
+  logfile << getCurrentTime() << "Read image file." << endl;
   Image standard(standardMat);
   int count = 0;
-  logfile << getCurrentTime() << "Starting face detection." << endl;
-    //read jpg file using the stb_image library
+  //read jpg file using the stb_image library
   int bpp;
   uint8_t* rgb_image = stbi_load(IMAGE_FILE_NAME, &CAMERA_WIDTH, &CAMERA_HEIGHT, &bpp, 3);
   std::vector< std::vector< std::vector<int> > >mat(CAMERA_WIDTH,std::vector< std::vector<int> >(CAMERA_HEIGHT,std::vector<int>(3,0)));
@@ -460,16 +473,17 @@ int main(const int argc, const char* const argv[]) {
     }
   }
   stbi_image_free(rgb_image);
-  logfile << getCurrentTime() << "Read frame." << endl;
+  logfile << getCurrentTime() << "Created image object." << endl;
   Image i(mat);
   std::vector<int> dims(4,0);
   //face detection if command line argument is 0
   if (choice==0) {
+    logfile << getCurrentTime() << "Starting face detection." << endl;
     EXTEND_DIMS = 5;
     int loss = 0;
     std::vector<int> params(3,0);
     //detect face
-    dims = i.detectFace(standard,r,g,b,loss,params,IMG_LEARNING_RATE);
+    dims = i.detectFace(standard,r,g,b,loss,params,IMG_LEARNING_RATE,&logfile,getCurrentTime());
     //if face detection is successful
     if (dims.size()>0) {
       EXTEND_DIMS = 20;
@@ -483,10 +497,11 @@ int main(const int argc, const char* const argv[]) {
       logfile << getCurrentTime() << "Face detected in frame " << count << " with upper-left corner (" << dims[0] << ", " << dims[1] << ") and dimensions " << dims[2] << "x" << dims[3] << "." << endl;
     }
     else 
-      logfile << getCurrentTime() << "No face detected in frame " << count << "." << endl;
+      logfile << getCurrentTime() << "Warning: No face detected in frame " << count << "." << endl;
   }
   //laser pointer detection if command line argument is 1
   else if (choice==1) {
+    logfile << getCurrentTime() << "Starting laser pointer detection." << endl;
     EXTEND_DIMS = 5;
     Image bw = i;
     //convert to grayscale
@@ -497,6 +512,7 @@ int main(const int argc, const char* const argv[]) {
       //find the largest (probably only) connected component
       Image newimg = Image();
       dims = bw.largestConnComp(newimg,50);
+      logfile << getCurrentTime() << "Found possible laser pointer candidate." << endl;
       //detect dominant red color
       int redCount = 0;
       for (int j = dims[0]; j<dims[0]+dims[2]; j++) {
@@ -510,6 +526,7 @@ int main(const int argc, const char* const argv[]) {
         break;
       //otherwise, set current connected component to false
       else {
+        logfile << getCurrentTime() << "Candidate was not a laser pointer. Retrying." << endl;
         for (int j = dims[0]; j<dims[0]+dims[2]; j++) {
           for (int k = dims[1]; k<dims[1]+dims[3]; k++) {
             bw.valid[j][k] = false;
@@ -521,10 +538,11 @@ int main(const int argc, const char* const argv[]) {
     if (dims.size()>0)
       logfile << getCurrentTime() << "Laser pointer detected in frame " << count << " at (" << (dims[0]+dims[2]/2) << ", " << (dims[1]+dims[3]/2) << ")." << endl;
     else
-      logfile << getCurrentTime() << "No laser pointer detected in frame " << count << "." << endl;
+      logfile << getCurrentTime() << "Warning: No laser pointer detected in frame " << count << "." << endl;
   }
   //averaging over entire image
   else {
+    logfile << getCurrentTime() << "Averaging over entire image." << endl;
     EXTEND_DIMS = 0;
     dims[0] = 0;
     dims[1] = 0;
@@ -533,6 +551,7 @@ int main(const int argc, const char* const argv[]) {
   }
   //dimensions of an area surrounding target detection
   //whether face or laser pointer
+  logfile << getCurrentTime() << "Computing average color around target." << endl;
   std::vector<int> extended(4,0);
   extended[0] = max(dims[0]-EXTEND_DIMS,0);
   extended[1] = max(dims[1]-EXTEND_DIMS,0);
@@ -546,7 +565,7 @@ int main(const int argc, const char* const argv[]) {
   //calibrations
   avg[1] = (int)(0.75*avg[1]);
   if (choice==1)
-    avg[0] = (int)(0.25*avg[0]);
+    avg[0] = (int)(0.5*avg[0]);
   //color adjustments for emphasis
   if (avg[0]>=avg[1]&&avg[0]>=avg[2])
     avg[0] = min(2*avg[0],100);
@@ -570,6 +589,6 @@ int main(const int argc, const char* const argv[]) {
     stdwrite << endl;
   }       
   stdwrite.close();
-  logfile << getCurrentTime() << "Wrote standard image template." << endl;
+  logfile << getCurrentTime() << "Updated standard image template." << endl;
   logfile.close();
 }

@@ -3,6 +3,9 @@
 #include <limits.h>
 #include <vector>
 #include <iostream>
+#include <ostream>
+#include <fstream>
+#include <string>
 
 class Image {
   public:
@@ -23,5 +26,5 @@ class Image {
     void threshhold(int thresh);
     void scaleDown(int w, int h);
     int hammingDist(Image img);
-    std::vector<int> detectFace(Image& standard, int r, int g, int b, int& loss, std::vector<int>& params, const double IMG_LEARNING_RATE);
+    std::vector<int> detectFace(Image& standard, int r, int g, int b, int& loss, std::vector<int>& params, const double IMG_LEARNING_RATE, std::ofstream* logfile, std::string time);
 };
