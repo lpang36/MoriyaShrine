@@ -496,8 +496,14 @@ int main(const int argc, const char* const argv[]) {
       logfile << getCurrentTime() << "Adjusted skin color filter to (" << r << ", " << g << ", " << b << ")." << endl;
       logfile << getCurrentTime() << "Face detected in frame " << count << " with upper-left corner (" << dims[0] << ", " << dims[1] << ") and dimensions " << dims[2] << "x" << dims[3] << "." << endl;
     }
-    else 
-      logfile << getCurrentTime() << "Warning: No face detected in frame " << count << "." << endl;
+    else {
+      EXTEND_DIMS = 0;
+      dims[0] = 0;
+      dims[1] = 0;
+      dims[2] = CAMERA_WIDTH;
+      dims[3] = CAMERA_HEIGHT;
+      logfile << getCurrentTime() << "Warning: No face detected in frame " << count << ". Averaging over entire image." << endl;
+    }
   }
   //laser pointer detection if command line argument is 1
   else if (choice==1) {
@@ -537,8 +543,14 @@ int main(const int argc, const char* const argv[]) {
     //if laser pointer detection successful
     if (dims.size()>0)
       logfile << getCurrentTime() << "Laser pointer detected in frame " << count << " at (" << (dims[0]+dims[2]/2) << ", " << (dims[1]+dims[3]/2) << ")." << endl;
-    else
-      logfile << getCurrentTime() << "Warning: No laser pointer detected in frame " << count << "." << endl;
+    else {
+      EXTEND_DIMS = 0;
+      dims[0] = 0;
+      dims[1] = 0;
+      dims[2] = CAMERA_WIDTH;
+      dims[3] = CAMERA_HEIGHT;
+      logfile << getCurrentTime() << "Warning: No laser pointer detected in frame " << count << ". Averaging over entire image." << endl;
+    }
   }
   //averaging over entire image
   else {
