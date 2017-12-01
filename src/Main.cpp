@@ -539,11 +539,15 @@ int main(const int argc, const char* const argv[]) {
   extended[2] = min(dims[2]+2*EXTEND_DIMS,CAMERA_WIDTH-extended[0]);
   extended[3] = min(dims[3]+2*EXTEND_DIMS,CAMERA_HEIGHT-extended[1]);
   //compute average color in area
-  //scale down from 0-255 to 0-100
   std::vector<int> avg = i.averageColor(extended,choice!=0);
-  //color adjustments for emphasis
+  //scale down from 0-255 to 0-100
   for (int i = 0; i<avg.size(); i++) 
     avg[i] = avg[i]*100/255;
+  //calibrations
+  avg[1] = (int)(0.75*avg[1]);
+  if (choice==1)
+    avg[0] = (int)(0.25*avg[0]);
+  //color adjustments for emphasis
   if (avg[0]>=avg[1]&&avg[0]>=avg[2])
     avg[0] = min(2*avg[0],100);
   if (avg[1]>=avg[0]&&avg[1]>=avg[2])
