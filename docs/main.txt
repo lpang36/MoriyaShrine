@@ -1,0 +1,5 @@
+Software Overview
+
+The main logic for this project is contained in Main.cpp. Based on user input, it will be passed two command line arguments: the first will be an integer from 0-2, and the second will be the name of the image file, in JPEG format. The first argument indicates the mode of operation. 0 is for face detection, 1 is for laser pointer detection, and 2 is for averaging across the entire image. 
+
+The main method will first read the JPEG image with stb_image, an open source library for reading image files. It will then convert the data in the image to an object of Image class. The Image class is defined in Image.h, and its methods are implemented in Main.cpp. Depending on the mode of operation, it will then attempt to recognize a target area, which may be a face, a laser pointer, or the entire image. If it is unsuccessful in doing so, it will output a warning to the log file and default to processing the entire image. Then, it will compute the average color over the target area, and write this to the output.txt file, which is used to write output to the RGB LED.

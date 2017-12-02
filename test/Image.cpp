@@ -82,17 +82,23 @@ void Image::dilate(int r) {
   valid = temp;
 }
 
-std::vector<int> Image::largestConnComp(Image& img) {
+//finds the bounding box for the largest connected component of true pixels
+//returns a vector in the form [smallest x value, smallest y value, width, height]
+std::vector<int> Image::largestConnComp(Image& img, int maxSize = INT_MAX) {
   std::vector< std::vector<bool> > checked(width,std::vector<bool>(height,false));
   std::vector<int> wvals(0);
   std::vector<int> hvals(0);
-  int wpoint;
-  int hpoint;
+  int wpoint = -1;
+  int hpoint = -1;
   int max = 0;
+  //finds size of largest connected component and keeps track of one pixel in that component
+  //uses flood fill algorithm
   for (int i = 0; i<width; i++) {
     for (int j = 0; j<height; j++) {
-      if (!checked[i][j]) {
-        int count = 0;
+      if (!checked[i][j]&&valid[i][j]) {
+        wvals.clear();
+        hvals.clear();
+        int count = 1;
         wvals.push_back(i);
         hvals.push_back(j);
         while (wvals.size()!=0&&hvals.size()!=0) {
@@ -126,7 +132,7 @@ std::vector<int> Image::largestConnComp(Image& img) {
             count++;
           }
         }
-        if (count>max) {
+        if (count>max&&count<=maxSize) {
           max = count;
           wpoint = i;
           hpoint = j;
@@ -134,6 +140,8 @@ std::vector<int> Image::largestConnComp(Image& img) {
       }
     }
   }
+  if (wpoint==-1&&hpoint==-1)
+    return std::vector<int>(0);
   checked = std::vector <std::vector<bool> >(width,std::vector<bool>(height,false));
   wvals.clear();
   hvals.clear();
@@ -143,6 +151,10 @@ std::vector<int> Image::largestConnComp(Image& img) {
   int hmax = 0;
   wvals.push_back(wpoint);
   hvals.push_back(hpoint);
+  checked[wpoint][hpoint] = true;
+  int count = 1;
+  //finds bounds on largest connected component starting with tracked pixel from above
+  //again uses flood fill algorithm
   while (wvals.size()!=0&&hvals.size()!=0) {
     int k = wvals.back();
     wvals.pop_back();
@@ -161,23 +173,28 @@ std::vector<int> Image::largestConnComp(Image& img) {
       checked[k+1][l+1] = true;
       wvals.push_back(k+1);
       hvals.push_back(l+1);
+      count++;
     }
     if (k+1>=0&&k+1<width&&l-1>=0&&l-1<height&&!checked[k+1][l-1]&&valid[k+1][l-1]) {
       checked[k+1][l-1] = true;
       wvals.push_back(k+1);
       hvals.push_back(l-1);
+      count++;
     }
     if (k-1>=0&&k-1<width&&l+1>=0&&l+1<height&&!checked[k-1][l+1]&&valid[k-1][l+1]) {
       checked[k-1][l+1] = true;
       wvals.push_back(k-1);
       hvals.push_back(l+1);
+      count++;
     }
     if (k-1>=0&&k-1<width&&l-1>=0&&l-1<height&&!checked[k-1][l-1]&&valid[k-1][l-1]) {
       checked[k-1][l-1] = true;
       wvals.push_back(k-1);
       hvals.push_back(l-1);
+      count++;
     }
   }
+  //writes all pixels and filter values within bounds to an image, passed by reference
   img.width = wmax-wmin+1;
   img.height = hmax-hmin+1;
   img.depth = depth;

@@ -86,6 +86,7 @@ void ImageTest::displayFilter(Image img) {
 }
 
 void ImageTest::test (const char* filename) {
+  /*
   cv::Mat img = cv::imread(filename,CV_LOAD_IMAGE_COLOR);
   std::vector< std::vector< std::vector<int> > > mat(img.cols,std::vector< std::vector<int> >(img.rows,std::vector<int>(3)));
   for (int i = 0; i<img.rows; i++) {
@@ -96,6 +97,7 @@ void ImageTest::test (const char* filename) {
       mat[j][i][0] = intensity.val[2];
     }
   }
+  */
   int width, height, bpp;
     uint8_t* rgb_image = stbi_load(filename, &width, &height, &bpp, 3);
     std::vector< std::vector< std::vector<int> > >mat2(width,std::vector< std::vector<int> >(height,std::vector<int>(3,0)));
@@ -107,21 +109,47 @@ void ImageTest::test (const char* filename) {
       }
     }
   Image i(mat2);
+  std::vector<int> dims(4,0);
   double tolerance = 0;
-  i.flatten();
-  i.threshhold(200);
+  Image bw = i;
+  bw.flatten();
+  bw.threshhold(235);
   //displayFilter(i);
   Image newimg = Image();
-  std::vector<int> dims = i.largestConnComp(newimg);
-  displayBox(i,dims);
+  while (dims.size()>0) {
+      //find the largest (probably only) connected component
+      Image newimg = Image();
+      dims = bw.largestConnComp(newimg,50);
+      //detect dominant red color
+      int redCount = 0;
+      for (int j = dims[0]; j<dims[0]+dims[2]; j++) {
+        for (int k = dims[1]; k<dims[1]+dims[3]; k++) {
+          if (i.mat[j][k][0]>=i.mat[j][k][1]&&i.mat[j][k][0]>=i.mat[j][k][2])
+            redCount++;
+        }
+      }
+    cout << ((redCount+0.0)/(dims[2]*dims[3])) << endl;
+      cout << dims[0] << " " << dims[1] << endl;
+      //if red is dominant, pointer detected
+      if ((redCount+0.0)/(dims[2]*dims[3])>0.8&&dims[2]<10&&dims[3]<10)
+        break;
+    else {
+        for (int j = dims[0]; j<dims[0]+dims[2]; j++) {
+          for (int k = dims[1]; k<dims[1]+dims[3]; k++) {
+            bw.valid[j][k] = false;
+          }
+        }
+     }
+    }
+  displayBox(bw,dims);
   stbi_image_free(rgb_image);
   //displayColor(i,0);
   int rskin = 255;
-  int gskin = 227;
-  int bskin = 159;
-  tolerance = 16.5;
-  int rerode = 9;
-  int rdilate = 9;
+  int gskin = 217;
+  int bskin = 139;
+  tolerance = 10;
+  int rerode = 3;
+  int rdilate = 5;
   int thresh = 50;
   int w = 16;
   int h = 16;
@@ -153,13 +181,9 @@ void ImageTest::test (const char* filename) {
   int loss = 0;
   std::vector<int> params(3,0);
   int IMG_LEARNING_RATE = 0.1;
-  dims = i.detectFace(temp,rskin,gskin,bskin,loss,params,IMG_LEARNING_RATE);
-  i.flatten();
-  dims[0] = 130;
-  dims[1] = 334;
-  dims[2] = 10;
-  dims[3] = 10;
-  displayBox(i,dims);
+  //std::vector<int> dims = i.detectFace(temp,rskin,gskin,bskin,loss,params,IMG_LEARNING_RATE);
+  //i.flatten();
+  //displayBox(i,dims);
   //displayBW(temp,true);
   i.colorFilter(rskin,bskin,gskin,tolerance);
   displayFilter(i);
@@ -167,8 +191,8 @@ void ImageTest::test (const char* filename) {
   displayFilter(i);
   i.dilate(rdilate);
   displayFilter(i);
-  newimg = Image();
-  dims = i.largestConnComp(newimg);
+  //Image newimg = Image();
+  dims = i.largestConnComp(newimg,INT_MAX);
   for (int i = 0; i<dims.size(); i++)
     cout << dims[i] << " ";
   cout << endl;

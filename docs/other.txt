@@ -1,0 +1,11 @@
+Additional Aspects
+
+C/C++ files: 
+Main.cpp - main logic of the program, and implements methods in the Image class.
+Image.h - defines the Image class.
+stb_image.h - open-source public-domain library used to read image files.
+
+Shell files:
+
+Other files:
+std.txt - contains a standard face image.

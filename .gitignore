@@ -1,6 +1,6 @@
 /data
+/test/*.png
 *.jpg
-*.png
 *.csv
 *.pyc
 *.h5
