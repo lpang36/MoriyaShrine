@@ -1,5 +1,5 @@
 # Project Overview 
-The purpose of our project is to provide intelligent mood lighting for a small area, based on environmental cues. The lighting color can be generated in three ways: based on averaging image color, background color behind a laser pointer, and background color behind a personís face. In addition, the project logs its results with warnings and errors, and improves its own face detection model iteratively.  
+The purpose of our project is to provide intelligent mood lighting for a small area, based on environmental cues. The lighting color can be generated in three ways: based on averaging image color, background color behind a laser pointer, and background color behind a person‚Äôs face. In addition, the project logs its results with warnings and errors, and improves its own face detection model iteratively.  
 
 This project is about several themes: intelligent image processing for recognizing certain elements, processing data using the limited capabilities of an embedded system on a chip (SoC), interfacing analog output with an embedded SoC, and interacting with compiled programs through system scripts. 
 
@@ -15,21 +15,21 @@ The main method will first read the JPEG image with stb_image, an open source li
 
 ## State Machine Diagram 
 
-![](images/statemachine.jpg)
+![](images/statemachine.JPG)
 
 ## Function Call Trees 
 The diagrams below are the function call trees for each of the three modes of operation. System functions, such as file writing and reading, and functions used multiple times, such as getCurrentTime and constructors, are omitted or shown only once for clarity. 
 ### Face Detection Call Tree 
 
-![](images/facedetection.jpg)
+![](images/facedetection.JPG)
 
 ### Laser Pointer Detection Call Tree 
 
-![](images/laserdetection.jpg)
+![](images/laserdetection.JPG)
 
 ### Entire Image Call Tree 
 
-![](images/imagetree.jpg)
+![](images/imagetree.JPG)
 
 ## Classes and Methods 
 ### Image Processing 
@@ -69,7 +69,7 @@ This algorithm is considerably simpler than the face detection algorithm. The im
 string getCurrentTime(): Defined in Main.cpp but not part of the Image class. This function returns the current timestamp as a string. It is used for logging purposes. 
 
 ## System-Dependent Components 
-System-dependent code is that which functions specifically on the Omega2. The code contained in Main.cpp is generally not system-dependent. The primary interaction between the Omega2 and the software is through the shell file. The majority of shell file commands can be executed on any generic UNIX-based environment (provided that the ash or bash shell is present). However, the writing of PWM values to the RGB LED is system-dependent, making use of the Omega2ís GPIO pins and the fast-gpio package built in. 
+System-dependent code is that which functions specifically on the Omega2. The code contained in Main.cpp is generally not system-dependent. The primary interaction between the Omega2 and the software is through the shell file. The majority of shell file commands can be executed on any generic UNIX-based environment (provided that the ash or bash shell is present). However, the writing of PWM values to the RGB LED is system-dependent, making use of the Omega2‚Äôs GPIO pins and the fast-gpio package built in. 
 
 ## System-Independent Components 
 Most of the software is system-independent. The image processing methods and algorithms in the Image class can operate similarly on any platform. The main logic of the software, contained in Main.cpp, is also independent of the Omega2. Receiving input from the webcam and storing it to memory through the shell file is mostly system-independent, only with the note that the fswebcam package must be installed (and of course, it must be run on a UNIX system with a shell that supersedes ash). Finally, the logging infrastructure, which will be further explained below, is system-independent as well. 
@@ -86,12 +86,12 @@ Finally, there are error statements, prefixed by "Error: ". These will be logged
 ## Standard Face Image 
 The standard face image is contained in std.txt. While it is used in facial detection, it also serves another purpose. Although the Omega2 is not powerful enough to support true machine learning, a very rudimentary form of machine learning could still be implemented where the algorithm can continuously self-improve as it makes more face detections.  
 
-If a face is detected in the image, the average color of the face is found. A weighted average of these values and the original "standard" face color is done, which becomes the new face color to be used in filtering the next image. A similar operation is done on the image of the face. The previous image is updated with a weighted average of the new values. At the end, the updated image and color are written to the std.txt file, so these values can be reused when the program executes again. Ideally, if the user of the product scans many images of their face, the values in std.txt will resemble the userís own face more and more closely. This allows the face detection algorithm to continuously improve itself, without the need for external input ñ a basic form of unsupervised machine learning.  
+If a face is detected in the image, the average color of the face is found. A weighted average of these values and the original "standard" face color is done, which becomes the new face color to be used in filtering the next image. A similar operation is done on the image of the face. The previous image is updated with a weighted average of the new values. At the end, the updated image and color are written to the std.txt file, so these values can be reused when the program executes again. Ideally, if the user of the product scans many images of their face, the values in std.txt will resemble the user‚Äôs own face more and more closely. This allows the face detection algorithm to continuously improve itself, without the need for external input ‚Äì a basic form of unsupervised machine learning.  
 
 ## Shell Script 
 The interfacing between the hardware and the software on the Omega2 was done through a UNIX shell script written for the ash shell (natively run on the Omega2).  
 
-The script opens with ASCII art (inspired by the Omega2ís ìWhat will you inventî banner). Interfacing with the webcam (a Logitech C170) was done through the package fswebcam 
+The script opens with ASCII art (inspired by the Omega2‚Äôs ‚ÄúWhat will you invent‚Äù banner). Interfacing with the webcam (a Logitech C170) was done through the package fswebcam 
 (installed through opkg, natively built for openwrt on the MIPS-24K architecture). The fswebcam program was run with the flags -p YUYV which sets the colour encoding system in the file to the YUYV format, (the only one suitable for the C170), --no-banner, which disables the bottom banner with date/time that is written by default by fswebcam, and -r 300x300, which sets the resolution to fit the size of a 300x300px image (since the aspect ratio was not 1:1, the image ended up 352x288). Finally, the parameter was set to image.jpg, specifying the output file name. 
 
 The next steps in the script are to clear the logfile from the previous run (as logfiles build up quickly due to the amount of data stored within them) and call the Main C++ program with the parameters passed in.  
@@ -99,7 +99,7 @@ The next steps in the script are to clear the logfile from the previous run (as 
 The script sets up the output file to be read, then reads it line by line and writes the value to the output pins accordingly. Output pins 0-2 were set up to the LED pins for R,G,B respectively, and written using the fast-gpio package available. It sets them to output pwm (software pwm provided through digital outputs with sequences of delays in between) at 500Hz, with a on-time percentage specified by the output file. No error checking was done for the output file, as the values must have been set by the C++ program to fit the required format. Finally, the logfile is opened and displayed for demo purposes. 
 
 ## Cross-Compilation Considerations 
-Cross-compilation was done utilizing the LEDE buildchain for the MIPS-24K architecture. The toolchain was set up on a local Arch Linux system referencing notes created by the TAís. The toolchain was modified to allow compilation of C++ programs and work with fast-gpio. xCompile.sh and the makefile can be found in the appendix with minor modifications made from the original example files; notable changes include changing the compiler to g++ instead of gcc and editing target names.  
+Cross-compilation was done utilizing the LEDE buildchain for the MIPS-24K architecture. The toolchain was set up on a local Arch Linux system referencing notes created by the TA‚Äôs. The toolchain was modified to allow compilation of C++ programs and work with fast-gpio. xCompile.sh and the makefile can be found in the appendix with minor modifications made from the original example files; notable changes include changing the compiler to g++ instead of gcc and editing target names.  
 
 ## Additional Aspects 
 A summary of the source files of the project is listed below. 
@@ -122,8 +122,8 @@ The hardware consists of four basic components: the Omega2 SoC, the Logitech C17
 
 The C170 webcam is an inexpensive VGA-quality webcam that captures images in the YUYV colour space. This webcam was chosen due to its plug-and-play capabilities (using fswebcam, as specified above in the shell script description), the fact that high resolution pictures were not necessary, and its price. It was connected to the Omega2 simply using its inbuilt USB interface.  
 
-The common cathode RGB LED was wired to the Omega2 using a simple breadboard. It receives R, G, B values from three separate pins, read as analog inputs. The higher the voltage that was passed to the pin, the brighter the respective colour would be. The common cathode pin (as per its name) grounds the LED, and was connected to the Omega2ís grounding pin. 
+The common cathode RGB LED was wired to the Omega2 using a simple breadboard. It receives R, G, B values from three separate pins, read as analog inputs. The higher the voltage that was passed to the pin, the brighter the respective colour would be. The common cathode pin (as per its name) grounds the LED, and was connected to the Omega2‚Äôs grounding pin. 
 
-The toilet paper roll was a fairly last-minute design decision that was deemed necessary due to the inherent ìseparationî of colour characteristic of RGB LEDís. In order to provide a suitable colour output that was representative of the scene, the three colours had to be diffused slightly and combined into one. Furthermore, the toilet paper roll prevents any damage to the eyes from accidentally looking straight into the LED. 
+The toilet paper roll was a fairly last-minute design decision that was deemed necessary due to the inherent ‚Äúseparation‚Äù of colour characteristic of RGB LED‚Äôs. In order to provide a suitable colour output that was representative of the scene, the three colours had to be diffused slightly and combined into one. Furthermore, the toilet paper roll prevents any damage to the eyes from accidentally looking straight into the LED. 
 
-The Omega2 SoC was where all the commands were run from. GPIO pins 0, 1, and 2 were wired to RGB LED pins for R, G, and B, and the ground pin was connected to ground the LED. The C170 webcam was attached through USB. Control for the Omega2 was done through ssh from a laptop connected to the Omega2ís local network. 
+The Omega2 SoC was where all the commands were run from. GPIO pins 0, 1, and 2 were wired to RGB LED pins for R, G, and B, and the ground pin was connected to ground the LED. The C170 webcam was attached through USB. Control for the Omega2 was done through ssh from a laptop connected to the Omega2‚Äôs local network. 
